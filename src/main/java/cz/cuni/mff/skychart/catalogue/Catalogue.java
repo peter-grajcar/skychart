@@ -1,4 +1,4 @@
-package cz.cuni.mff.skychart.catalog;
+package cz.cuni.mff.skychart.catalogue;
 
 /**
  * A star catalogue.

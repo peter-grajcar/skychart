@@ -7,9 +7,9 @@ package cz.cuni.mff.skychart.astronomy;
  */
 public class Star {
 
-    private String name;
-    private EquatorialCoords coords;
-    private double magnitude;
+    protected String name;
+    protected EquatorialCoords coords;
+    protected double magnitude;
 
     public String getName() {
         return name;
