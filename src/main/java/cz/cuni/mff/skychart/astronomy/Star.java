@@ -9,7 +9,7 @@ public class Star {
 
     protected String name;
     protected EquatorialCoords coords;
-    protected double magnitude;
+    protected double visualMagnitude;
 
     public String getName() {
         return name;
@@ -27,11 +27,11 @@ public class Star {
         this.coords = coords;
     }
 
-    public double getMagnitude() {
-        return magnitude;
+    public double getVisualMagnitude() {
+        return visualMagnitude;
     }
 
-    public void setMagnitude(double magnitude) {
-        this.magnitude = magnitude;
+    public void setVisualMagnitude(double visualMagnitude) {
+        this.visualMagnitude = visualMagnitude;
     }
 }

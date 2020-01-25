@@ -1,5 +1,7 @@
 package cz.cuni.mff.skychart.astronomy;
 
+import java.time.LocalTime;
+
 /**
  * An object representing coordinates in an equatorial coordinate system (right-ascension, declination).
  *
@@ -16,6 +18,10 @@ public class EquatorialCoords {
     public EquatorialCoords(double rightAscension, double declination) {
         this.rightAscension = rightAscension;
         this.declination = declination;
+    }
+
+    public HorizontalCoords toHorizontal(LocalTime time, Location location) {
+        return Coordinates.equatorialToHorizontal(this, time, location);
     }
 
     public double getRightAscension() {

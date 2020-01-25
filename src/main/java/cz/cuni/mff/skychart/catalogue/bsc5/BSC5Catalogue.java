@@ -1,4 +1,6 @@
-package cz.cuni.mff.skychart.catalogue;
+package cz.cuni.mff.skychart.catalogue.bsc5;
+
+import cz.cuni.mff.skychart.catalogue.Catalogue;
 
 /**
  * An implementation of {@link Catalogue Catalogue} that gets its data from Yale Bright Star Catalog (BSC5)
