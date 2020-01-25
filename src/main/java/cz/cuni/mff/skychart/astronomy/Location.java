@@ -30,4 +30,12 @@ public class Location {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    public double getLongitudeRadians() {
+        return longitude * Math.PI / 180;
+    }
+
+    public double getLatitudeRadians() {
+        return latitude * Math.PI / 180;
+    }
 }
