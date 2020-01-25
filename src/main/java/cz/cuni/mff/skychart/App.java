@@ -2,7 +2,6 @@ package cz.cuni.mff.skychart;
 
 import cz.cuni.mff.skychart.settings.Localisation;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
 import java.util.ResourceBundle;
 
 /**
- * created: 25/01/2020
+ * JavaFX application.
  *
  * @author Peter Grajcar
  */
