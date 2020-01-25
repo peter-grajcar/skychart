@@ -1,19 +1,19 @@
 package cz.cuni.mff.skychart.astronomy;
 
 /**
- * created: 25/01/2020
+ * An object representing coordinates in an equatorial coordinate system (right-ascension, declination).
  *
  * @author Peter Grajcar
  */
-public class RaDec {
+public class EquatorialCoords {
 
     private double rightAscension;
     private double declination;
 
-    public RaDec() {
+    public EquatorialCoords() {
     }
 
-    public RaDec(double rightAscension, double declination) {
+    public EquatorialCoords(double rightAscension, double declination) {
         this.rightAscension = rightAscension;
         this.declination = declination;
     }

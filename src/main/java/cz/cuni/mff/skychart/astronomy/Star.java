@@ -1,15 +1,14 @@
 package cz.cuni.mff.skychart.astronomy;
 
 /**
- * created: 25/01/2020
+ * An object representing a star.
  *
  * @author Peter Grajcar
  */
 public class Star {
 
     private String name;
-    private double rightAscension;
-    private double declination;
+    private EquatorialCoords coords;
     private double magnitude;
 
     public String getName() {
@@ -20,20 +19,12 @@ public class Star {
         this.name = name;
     }
 
-    public double getRightAscension() {
-        return rightAscension;
+    public EquatorialCoords getCoords() {
+        return coords;
     }
 
-    public void setRightAscension(double rightAscension) {
-        this.rightAscension = rightAscension;
-    }
-
-    public double getDeclination() {
-        return declination;
-    }
-
-    public void setDeclination(double declination) {
-        this.declination = declination;
+    public void setCoords(EquatorialCoords coords) {
+        this.coords = coords;
     }
 
     public double getMagnitude() {

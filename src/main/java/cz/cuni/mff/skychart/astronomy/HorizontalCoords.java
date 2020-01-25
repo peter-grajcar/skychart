@@ -1,19 +1,19 @@
 package cz.cuni.mff.skychart.astronomy;
 
 /**
- * created: 25/01/2020
+ * An object representing coordinates in a horizontal coordinate system (altitude-azimuth).
  *
  * @author Peter Grajcar
  */
-public class AltAz {
+public class HorizontalCoords {
 
     private double altitude;
     private double azimuth;
 
-    public AltAz() {
+    public HorizontalCoords() {
     }
 
-    public AltAz(double altitude, double azimuth) {
+    public HorizontalCoords(double altitude, double azimuth) {
         this.altitude = altitude;
         this.azimuth = azimuth;
     }

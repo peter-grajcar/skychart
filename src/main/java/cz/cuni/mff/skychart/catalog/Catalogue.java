@@ -1,9 +1,9 @@
 package cz.cuni.mff.skychart.catalog;
 
 /**
- * created: 25/01/2020
+ * A star catalogue.
  *
  * @author Peter Grajcar
  */
-public interface Catalog {
+public interface Catalogue {
 }
