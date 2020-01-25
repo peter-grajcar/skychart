@@ -1,9 +1,7 @@
 package cz.cuni.mff.skychart.astronomy;
 
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.temporal.ChronoField;
 import java.time.temporal.JulianFields;
 
 /**
@@ -13,17 +11,23 @@ import java.time.temporal.JulianFields;
  */
 public class Coordinates {
 
-    public static HorizontalCoords equatorialToHorizontal(EquatorialCoords eq, Instant time, Location location) {
-        ZonedDateTime utc = time.atZone(ZoneOffset.UTC);
+    public static double getUniversalTime(ZonedDateTime time) {
+        LocalDateTime utc = LocalDateTime.ofInstant(time.toInstant(), ZoneOffset.UTC);
+        return utc.getHour() + utc.getMinute()/60 + utc.getSecond()/3600;
+    }
 
-        double universalTime = utc.getHour() + utc.getMinute()/60 + utc.getSecond()/3600;
-        double epochJ2000 = time.get(JulianFields.JULIAN_DAY);
+    public static double getLocalSiderealTime(ZonedDateTime time, Location location) {
+        double universalTime = getUniversalTime(time);
+        double epochJ2000 = time.getLong(JulianFields.JULIAN_DAY);
 
-        //Local Sidereal Time
+        //TODO: Rewrite using radians instead of degrees
         double lst = (100.46 + 0.985647 * epochJ2000 + location.getLongitude() + 15*universalTime) % 360;
-        lst = lst > 0 ? lst : 360 - lst;
-        lst /= 2 * Math.PI;
+        lst = lst > 0 ? lst : 360 + lst;
+        return lst * Math.PI / 180;
+    }
 
+    public static HorizontalCoords equatorialToHorizontal(EquatorialCoords eq, ZonedDateTime time, Location location) {
+        double lst = getLocalSiderealTime(time, location);
         double hourAngle = lst - eq.getRightAscension();
 
         double alt =  Math.asin(Math.sin(eq.getDeclination())*Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclination())*Math.cos(location.getLatitudeRadians())*Math.cos(hourAngle) );
