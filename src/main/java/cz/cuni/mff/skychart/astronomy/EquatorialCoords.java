@@ -20,6 +20,13 @@ public class EquatorialCoords {
         this.declination = declination;
     }
 
+    /**
+     * Converts the equatorial coordinates to the horizontal system at given time and location.
+     *
+     * @param time Time of the observation
+     * @param location Geographical location of the observer
+     * @return Coordinates in horizontal system
+     */
     public HorizontalCoords toHorizontal(ZonedDateTime time, Location location) {
         return Coordinates.equatorialToHorizontal(this, time, location);
     }

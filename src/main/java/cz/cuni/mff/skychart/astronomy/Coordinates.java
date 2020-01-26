@@ -12,11 +12,24 @@ import java.time.temporal.JulianFields;
  */
 public class Coordinates {
 
+    /**
+     * Computes the Universal Time (UT) at given time.
+     *
+     * @param time Time
+     * @return Universal Time
+     */
     public static double getUniversalTime(ZonedDateTime time) {
         LocalDateTime utc = LocalDateTime.ofInstant(time.toInstant(), ZoneOffset.UTC);
         return utc.getHour() + utc.getMinute()/60 + utc.getSecond()/3600;
     }
 
+    /**
+     * Computes the Local Sidereal Time (LST) at given time and location.
+     *
+     * @param time Time
+     * @param location Geographical location
+     * @return Local Sidereal Time
+     */
     public static double getLocalSiderealTime(ZonedDateTime time, Location location) {
         double universalTime = getUniversalTime(time);
         double epochJ2000 = time.getLong(JulianFields.JULIAN_DAY);
@@ -27,6 +40,14 @@ public class Coordinates {
         return lst * Math.PI / 180;
     }
 
+    /**
+     * Converts the equatorial coordinates to the horizontal system.
+     *
+     * @param eq Equatorial coordinates
+     * @param time Time of the observation
+     * @param location Geographical location of the observer
+     * @return Coordinates in horizontal system
+     */
     public static HorizontalCoords equatorialToHorizontal(EquatorialCoords eq, ZonedDateTime time, Location location) {
         double lst = getLocalSiderealTime(time, location);
         double hourAngle = lst - eq.getRightAscension();
