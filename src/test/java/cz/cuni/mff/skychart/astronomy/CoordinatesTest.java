@@ -2,10 +2,9 @@ package cz.cuni.mff.skychart.astronomy;
 
 import org.junit.Test;
 
-import java.time.*;
-import java.time.temporal.ChronoField;
-
-import static org.junit.Assert.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 /**
  * created: 25/01/2020
