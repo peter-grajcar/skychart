@@ -1,4 +1,6 @@
-package cz.cuni.mff.skychart.astronomy;
+package cz.cuni.mff.skychart.catalogue;
+
+import cz.cuni.mff.skychart.astronomy.EquatorialCoords;
 
 /**
  * An object representing a star.
