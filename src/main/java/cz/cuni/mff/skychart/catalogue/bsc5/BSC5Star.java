@@ -23,6 +23,28 @@ public class BSC5Star extends Star {
     };
 
     /**
+     * Returns star's name as combination of a greek or latin letter and constellation name (Bayer designation).
+     *
+     * @return star's name in Bayer designation.
+     */
+    public String getBayerName() {
+        String letter = name.substring(3, 7).strip();
+        String constellation = name.substring(7, 10);
+        return letter + (letter.isBlank() ? "" : " " + constellation);
+    }
+
+    /**
+     * Returns star's name as combination of a number and constellation name (Flamsteed designation).
+     *
+     * @return star's name in Flamsteed designation.
+     */
+    public String getFlamsteedName() {
+        String number = name.substring(0, 3).strip();
+        String constellation = name.substring(7, 10);
+        return number + (number.isBlank() ? "" : " " + constellation);
+    }
+
+    /**
      * Parses the string argument as an entry in BSC5 catalogue.
      *
      * @param s entry from BSC5 catalogue.

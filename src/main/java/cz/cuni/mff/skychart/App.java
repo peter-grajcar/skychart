@@ -52,17 +52,14 @@ public class App extends Application {
                     LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC),
                     new Location(0, 0)
             );
-            /*
-            double r = star.getCoords().getDeclination() * 400 / 90;
-            double x = 400 + r * Math.cos(star.getCoords().getRightAscensionRadians());
-            double y = 400 + r * Math.sin(star.getCoords().getRightAscensionRadians());
-            */
+
             if(horizontalCoords.getAltitude() < 0) continue;
+
             double r = (90 - horizontalCoords.getAltitude())/90 * 400;
             double x = 400 + r * Math.cos(horizontalCoords.getAzimuthRadians());
             double y = 400 + r * Math.sin(horizontalCoords.getAzimuthRadians());
 
-            double size = 0.5 + 3 * Math.sqrt(Math.pow(2.512, -star.getVisualMagnitude()));
+            double size = 0.5 + 4 * Math.sqrt(Math.pow(2.512, -star.getVisualMagnitude()));
             context.fillOval(x - size/2, y - size/2, size, size);
         }
 

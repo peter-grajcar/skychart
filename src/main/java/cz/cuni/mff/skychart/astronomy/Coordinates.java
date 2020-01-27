@@ -67,9 +67,13 @@ public class Coordinates {
         double hourAngle = (lst / 3600 - eq.getRightAscension()) * Math.PI / 12;
 
         double alt =  Math.asin(
-                Math.sin(eq.getDeclinationRadians()) * Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclinationRadians()) * Math.cos(location.getLatitudeRadians()) * Math.cos(hourAngle)
+                Math.sin(eq.getDeclinationRadians()) * Math.sin(location.getLatitudeRadians())
+                        + Math.cos(eq.getDeclinationRadians()) * Math.cos(location.getLatitudeRadians()) * Math.cos(hourAngle)
         );
-        double az = Math.acos( (Math.sin(eq.getDeclinationRadians()) - Math.sin(location.getLatitudeRadians() * Math.sin(alt))) / (Math.cos(location.getLatitudeRadians()) * Math.cos(alt)) );
+        double az = Math.acos(
+                (Math.sin(eq.getDeclinationRadians()) - Math.sin(location.getLatitudeRadians() * Math.sin(alt)))
+                        / (Math.cos(location.getLatitudeRadians()) * Math.cos(alt))
+        );
         az = Math.sin(hourAngle) < 0 ? az : 2*Math.PI - az;
 
         return new HorizontalCoords(alt * 180 / Math.PI, az * 180 / Math.PI);
