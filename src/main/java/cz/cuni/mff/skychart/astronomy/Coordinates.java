@@ -59,13 +59,13 @@ public class Coordinates {
         double lst = getLocalSiderealTime(time, location);
 
         // LST needs to be converted from seconds to radians
-        double hourAngle = lst * (2 * Math.PI) / 86400 - eq.getRightAscension();
+        double hourAngle = lst * (2 * Math.PI) / 86400 - eq.getRightAscensionRadians();
 
-        double alt =  Math.asin(Math.sin(eq.getDeclination())*Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclination())*Math.cos(location.getLatitudeRadians())*Math.cos(hourAngle) );
-        double az = Math.acos( Math.sin(eq.getDeclination()) - Math.sin(alt)*Math.sin(location.getLatitudeRadians()) ) / (alt)*Math.cos(location.getLatitudeRadians());
+        double alt =  Math.asin(Math.sin(eq.getDeclinationRadians())*Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclinationRadians())*Math.cos(location.getLatitudeRadians())*Math.cos(hourAngle) );
+        double az = Math.acos( Math.sin(eq.getDeclinationRadians()) - Math.sin(alt)*Math.sin(location.getLatitudeRadians()) ) / (alt)*Math.cos(location.getLatitudeRadians());
         az = Math.sin(hourAngle) < 0 ? az : 2*Math.PI - az;
 
-        return new HorizontalCoords(alt, az);
+        return new HorizontalCoords(alt * 180 / Math.PI, az * 180 / Math.PI);
     }
 
 }

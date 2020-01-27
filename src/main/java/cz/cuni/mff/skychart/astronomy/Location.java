@@ -38,4 +38,9 @@ public class Location {
     public double getLatitudeRadians() {
         return latitude * Math.PI / 180;
     }
+
+    @Override
+    public String toString() {
+        return String.format("LONG: %.4fdeg, LAT: %.4fdeg", longitude, latitude);
+    }
 }

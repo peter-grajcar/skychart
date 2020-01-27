@@ -1,7 +1,7 @@
 package cz.cuni.mff.skychart.astronomy;
 
 /**
- * An object representing coordinates in a horizontal coordinate system (altitude-azimuth). Values are in radians.
+ * An object representing coordinates in a horizontal coordinate system (altitude-azimuth). Values are in degrees.
  *
  * @author Peter Grajcar
  */
@@ -32,5 +32,18 @@ public class HorizontalCoords {
 
     public void setAzimuth(double azimuth) {
         this.azimuth = azimuth;
+    }
+
+    public double getAltitudeRadians() {
+        return altitude * Math.PI / 180d;
+    }
+
+    public double getAzimuthRadians() {
+        return azimuth * Math.PI / 180d;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ALT: %.4fdeg, AZ: %.4fdeg", altitude, azimuth);
     }
 }

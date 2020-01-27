@@ -3,8 +3,8 @@ package cz.cuni.mff.skychart.astronomy;
 import java.time.ZonedDateTime;
 
 /**
- * An object representing coordinates in an equatorial coordinate system (right-ascension, declination). Values are in
- * radians.
+ * An object representing coordinates in an equatorial coordinate system (right-ascension, declination). Right ascension
+ * in hours and declination in degrees.
  *
  * @author Peter Grajcar
  */
@@ -46,5 +46,18 @@ public class EquatorialCoords {
 
     public void setDeclination(double declination) {
         this.declination = declination;
+    }
+
+    public double getRightAscensionRadians() {
+        return rightAscension * Math.PI / 180d;
+    }
+
+    public double getDeclinationRadians() {
+        return declination * Math.PI / 180d;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("RA: %.4fh, DEC: %.4fdeg", rightAscension, declination);
     }
 }
