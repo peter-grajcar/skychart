@@ -14,4 +14,8 @@ public class BSC5FormatException extends Exception {
     public BSC5FormatException(String message) {
         super(message);
     }
+
+    public BSC5FormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

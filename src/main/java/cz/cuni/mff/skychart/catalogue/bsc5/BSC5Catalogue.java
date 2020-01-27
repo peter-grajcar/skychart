@@ -27,17 +27,20 @@ public class BSC5Catalogue implements Catalogue {
     public BSC5Catalogue() throws IOException, BSC5FormatException {
         stars = new ArrayList<>();
 
-        try(BufferedReader reader = new BufferedReader(new FileReader("bsc5/bsc5.dat"))) {
+        int entry = 1;
+        try(FileReader reader = new FileReader(getClass().getClassLoader().getResource("bsc5/bsc5.dat").getFile());
+            BufferedReader bufferedReader = new BufferedReader(reader)) {
             String line;
-            while((line = reader.readLine()) != null) {
+            while((line = bufferedReader.readLine()) != null) {
                 BSC5Star star = BSC5Star.parse(line);
                 stars.add(star);
+                ++entry;
             }
         } catch (IOException e) {
             logger.error("Error while loading the BSC5 catalogue.", e);
             throw e;
         } catch (BSC5FormatException e) {
-            logger.error("Error while parsing BSC5 catalogue entry.", e);
+            logger.error("Error while parsing BSC5 catalogue entry #" + entry, e);
             throw e;
         }
     }
