@@ -36,4 +36,9 @@ public class Star {
     public void setVisualMagnitude(double visualMagnitude) {
         this.visualMagnitude = visualMagnitude;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Name:      %s\nVis. Mag.: %.2f\nCoords:    (%s)", name, visualMagnitude, coords);
+    }
 }

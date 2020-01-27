@@ -32,11 +32,11 @@ public class Location {
     }
 
     public double getLongitudeRadians() {
-        return longitude * Math.PI / 180;
+        return longitude * Math.PI / 180d;
     }
 
     public double getLatitudeRadians() {
-        return latitude * Math.PI / 180;
+        return latitude * Math.PI / 180d;
     }
 
     @Override

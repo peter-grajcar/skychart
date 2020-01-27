@@ -49,7 +49,7 @@ public class EquatorialCoords {
     }
 
     public double getRightAscensionRadians() {
-        return rightAscension * Math.PI / 180d;
+        return rightAscension * Math.PI / 24d;
     }
 
     public double getDeclinationRadians() {

@@ -1,5 +1,8 @@
 package cz.cuni.mff.skychart.astronomy;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -11,6 +14,8 @@ import java.time.temporal.JulianFields;
  * @author Peter Grajcar
  */
 public class Coordinates {
+
+    private static final Logger logger = LogManager.getLogger(Coordinates.class);
 
     /**
      * Computes the Universal Time (UT) in seconds at given time.
@@ -59,10 +64,12 @@ public class Coordinates {
         double lst = getLocalSiderealTime(time, location);
 
         // LST needs to be converted from seconds to radians
-        double hourAngle = lst * (2 * Math.PI) / 86400 - eq.getRightAscensionRadians();
+        double hourAngle = (lst / 3600 - eq.getRightAscension()) * Math.PI / 12;
 
-        double alt =  Math.asin(Math.sin(eq.getDeclinationRadians())*Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclinationRadians())*Math.cos(location.getLatitudeRadians())*Math.cos(hourAngle) );
-        double az = Math.acos( Math.sin(eq.getDeclinationRadians()) - Math.sin(alt)*Math.sin(location.getLatitudeRadians()) ) / (alt)*Math.cos(location.getLatitudeRadians());
+        double alt =  Math.asin(
+                Math.sin(eq.getDeclinationRadians()) * Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclinationRadians()) * Math.cos(location.getLatitudeRadians()) * Math.cos(hourAngle)
+        );
+        double az = Math.acos( (Math.sin(eq.getDeclinationRadians()) - Math.sin(location.getLatitudeRadians() * Math.sin(alt))) / (Math.cos(location.getLatitudeRadians()) * Math.cos(alt)) );
         az = Math.sin(hourAngle) < 0 ? az : 2*Math.PI - az;
 
         return new HorizontalCoords(alt * 180 / Math.PI, az * 180 / Math.PI);
