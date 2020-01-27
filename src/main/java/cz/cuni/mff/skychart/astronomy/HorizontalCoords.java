@@ -1,7 +1,7 @@
 package cz.cuni.mff.skychart.astronomy;
 
 /**
- * An object representing coordinates in a horizontal coordinate system (altitude-azimuth).
+ * An object representing coordinates in a horizontal coordinate system (altitude-azimuth). Values are in radians.
  *
  * @author Peter Grajcar
  */

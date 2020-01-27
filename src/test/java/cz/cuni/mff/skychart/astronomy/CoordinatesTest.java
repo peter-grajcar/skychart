@@ -5,9 +5,10 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import static org.junit.Assert.*;
 
 /**
- * created: 25/01/2020
+ * Unit tests for {@link Coordinates Coordinates} class.
  *
  * @author Peter Grajcar
  */
@@ -15,13 +16,13 @@ public class CoordinatesTest {
 
     @Test
     public void localSiderealTimeCalculation() {
-        ZonedDateTime time = LocalDateTime.parse("2020-01-25T19:50:21").atZone(ZoneOffset.UTC);
+        ZonedDateTime time = LocalDateTime.parse("2019-01-01T08:00:00").atZone(ZoneOffset.UTC);
 
-        Location location = new Location(48.2, 17.4);
+        Location location = new Location(48.2, 0.0);
 
         double lst = Coordinates.getLocalSiderealTime(time, location);
-        System.out.println(lst);
-        //assertEquals(0.0, lst, 1e-10);
+
+        assertEquals(52965.37916293584, lst, 1e-8);
     }
 
     @Test

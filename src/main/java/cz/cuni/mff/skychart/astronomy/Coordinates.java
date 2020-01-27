@@ -13,31 +13,38 @@ import java.time.temporal.JulianFields;
 public class Coordinates {
 
     /**
-     * Computes the Universal Time (UT) at given time.
+     * Computes the Universal Time (UT) in seconds at given time.
      *
      * @param time Time
      * @return Universal Time
      */
     public static double getUniversalTime(ZonedDateTime time) {
         LocalDateTime utc = LocalDateTime.ofInstant(time.toInstant(), ZoneOffset.UTC);
-        return utc.getHour() + utc.getMinute()/60 + utc.getSecond()/3600;
+        return utc.getHour() * 3600d + utc.getMinute() * 60d + utc.getSecond();
     }
 
     /**
-     * Computes the Local Sidereal Time (LST) at given time and location.
+     * Computes the Local Sidereal Time (LST) in seconds at given time and location.
      *
      * @param time Time
      * @param location Geographical location
      * @return Local Sidereal Time
      */
     public static double getLocalSiderealTime(ZonedDateTime time, Location location) {
-        double universalTime = getUniversalTime(time);
-        double epochJ2000 = time.getLong(JulianFields.JULIAN_DAY);
+        LocalDateTime utc = LocalDateTime.ofInstant(time.toInstant(), ZoneOffset.UTC);
 
-        //TODO: Rewrite using radians instead of degrees
-        double lst = (100.46 + 0.985647 * epochJ2000 + location.getLongitude() + 15*universalTime) % 360;
-        lst = lst > 0 ? lst : 360 + lst;
-        return lst * Math.PI / 180;
+        double longitudeSeconds = location.getLongitude() * 240d; // note: 86400 / 360 = 240
+        double universalTime = getUniversalTime(time);
+        double epochJ2000 = utc.getLong(JulianFields.JULIAN_DAY) - 2451545.5;
+        double Tu = epochJ2000 / 36525d;
+        // H0 - Greenwich Mean Sidereal Time at midnight
+        double H0 = 24110.54841 + 8640184.812866 * Tu + 0.093104 * Tu * Tu - 6.2e-6 * Tu * Tu * Tu;
+        // omega - Earth's rotation rate (sidereal second / UT second)
+        double omega = 1.00273790935 + 5.9e-11 * Tu;
+        // add longitude in seconds to get Local Sidereal Time instead of Greenwich
+        double H = H0 + omega * universalTime + longitudeSeconds;
+
+        return H % 86400d;
     }
 
     /**
@@ -50,7 +57,9 @@ public class Coordinates {
      */
     public static HorizontalCoords equatorialToHorizontal(EquatorialCoords eq, ZonedDateTime time, Location location) {
         double lst = getLocalSiderealTime(time, location);
-        double hourAngle = lst - eq.getRightAscension();
+
+        // LST needs to be converted from seconds to radians
+        double hourAngle = lst * (2 * Math.PI) / 86400 - eq.getRightAscension();
 
         double alt =  Math.asin(Math.sin(eq.getDeclination())*Math.sin(location.getLatitudeRadians()) + Math.cos(eq.getDeclination())*Math.cos(location.getLatitudeRadians())*Math.cos(hourAngle) );
         double az = Math.acos( Math.sin(eq.getDeclination()) - Math.sin(alt)*Math.sin(location.getLatitudeRadians()) ) / (alt)*Math.cos(location.getLatitudeRadians());

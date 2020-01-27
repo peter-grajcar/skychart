@@ -3,7 +3,8 @@ package cz.cuni.mff.skychart.astronomy;
 import java.time.ZonedDateTime;
 
 /**
- * An object representing coordinates in an equatorial coordinate system (right-ascension, declination).
+ * An object representing coordinates in an equatorial coordinate system (right-ascension, declination). Values are in
+ * radians.
  *
  * @author Peter Grajcar
  */

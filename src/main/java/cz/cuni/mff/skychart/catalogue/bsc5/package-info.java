@@ -1,5 +1,5 @@
 /**
- * Contains classes specific for BSC5 catalogue.
+ * Contains classes specific to BSC5 catalogue.
  *
  * @author Peter Grajcar
  */
