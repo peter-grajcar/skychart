@@ -1,11 +1,16 @@
 package cz.cuni.mff.skychart.graphics;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class allows to project three-dimensional vector onto a plane using perspective projection.
  *
  * @author Peter Grajcar
  */
 public class PerspectiveProjectionPlane {
+
+    private static final Logger logger = LogManager.getLogger(PerspectiveProjectionPlane.class);
 
     private Vector3 pointOfView;
 
@@ -39,7 +44,10 @@ public class PerspectiveProjectionPlane {
      * @param angle angle in radians.
      */
     public void rotate(Vector3.Axis axis, double angle) {
-
+        pointOfView = pointOfView.rotate(axis, angle);
+        direction = direction.rotate(axis, angle);
+        up = up.rotate(axis, angle);
+        side = side.rotate(axis, angle);
     }
 
     /**
@@ -52,14 +60,15 @@ public class PerspectiveProjectionPlane {
      */
     public Vector2 project(Vector3 object) {
         Vector3 intersection = intersection(object);
+
         Vector3 P = pointOfView.add(direction);
-        Vector3 u = up.subtract(P);
-        Vector3 v = side.subtract(P);
+        Vector3 u = up;
+        Vector3 v = side;
         Vector3 w = intersection.subtract(P);
 
-        double denom = u.dot(v)*u.dot(v) - u.normSquared() * u.normSquared();
-        double x = (u.dot(v) * w.dot(u) - u.normSquared() * w.dot(v)) / denom;
-        double y = (u.dot(v) * w.dot(v) - v.normSquared() * w.dot(u)) / denom;
+        double denom = u.dot(v)*u.dot(v) - u.dot(u) * v.dot(v);
+        double x = (u.dot(v) * w.dot(u) - u.dot(u) * w.dot(v)) / denom;
+        double y = (u.dot(v) * w.dot(v) - v.dot(v) * w.dot(u)) / denom;
 
         return new Vector2(x, y);
     }

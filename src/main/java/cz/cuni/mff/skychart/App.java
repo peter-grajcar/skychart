@@ -5,7 +5,11 @@ import cz.cuni.mff.skychart.astronomy.Location;
 import cz.cuni.mff.skychart.catalogue.Catalogue;
 import cz.cuni.mff.skychart.catalogue.Star;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Catalogue;
+import cz.cuni.mff.skychart.catalogue.bsc5.BSC5FormatException;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Star;
+import cz.cuni.mff.skychart.graphics.PerspectiveProjectionPlane;
+import cz.cuni.mff.skychart.graphics.Vector2;
+import cz.cuni.mff.skychart.graphics.Vector3;
 import cz.cuni.mff.skychart.settings.Localisation;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -15,7 +19,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -28,6 +35,8 @@ import java.util.ResourceBundle;
  * @author Peter Grajcar
  */
 public class App extends Application {
+
+    private static final Logger logger = LogManager.getLogger(App.class);
 
     public static void main(String[] args) {
         launch(args);
@@ -44,12 +53,62 @@ public class App extends Application {
 
         Canvas canvas = new Canvas(800, 800);
 
+        //drawStars(canvas);
+        drawCube(canvas);
+
+        root.getChildren().addAll(canvas);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void drawCube(Canvas canvas) {
+        PerspectiveProjectionPlane plane = new PerspectiveProjectionPlane(
+                new Vector3(),
+                new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0)
+        );
+        Vector3[] vertices = {
+                new Vector3(5, 1, -1), new Vector3(5, 1, 1),
+                new Vector3(6, 1, 1), new Vector3(6, 1, -1),
+                new Vector3(5, -1, -1), new Vector3(5, -1, 1),
+                new Vector3(6, -1, 1), new Vector3(6, -1, -1),
+        };
+
+        GraphicsContext context = canvas.getGraphicsContext2D();
+
+        new AnimationTimer() {
+            private long prevNanoTime = -1;
+            @Override
+            public void handle(long l) {
+                long dt = 0;
+                if(prevNanoTime != -1)
+                    dt = System.nanoTime() - prevNanoTime;
+                prevNanoTime = System.nanoTime();
+
+                context.setFill(Color.WHITE);
+                context.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+
+                context.setFill(Color.BLACK);
+                for (Vector3 vertex : vertices) {
+                    Vector2 p = plane.project(vertex);
+                    double x = canvas.getWidth() / 2 + p.getX() * 400;
+                    double y = canvas.getHeight() / 2 + p.getY() * 400;
+                    context.fillOval(x - 3, y - 3, 6, 6);
+                }
+
+                plane.rotate(Vector3.Axis.Y, dt / 10_000_000_000d);
+            }
+        }.start();
+    }
+
+    private void drawStars(Canvas canvas) throws BSC5FormatException, IOException {
         Catalogue catalogue = new BSC5Catalogue();
         List<Star> stars = catalogue.starList();
 
         GraphicsContext context = canvas.getGraphicsContext2D();
 
         final long startNanoTime = System.nanoTime();
+
         new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -80,11 +139,6 @@ public class App extends Application {
                 }
             }
         }.start();
-
-
-        root.getChildren().addAll(canvas);
-        stage.setScene(scene);
-        stage.show();
     }
 
 }

@@ -63,4 +63,13 @@ public class VectorTest {
         assertEquals(-8, c.getZ(), 1e-8);
     }
 
+    @Test
+    public void testRotation() {
+        Vector3 a = new Vector3(3, 4, 5);
+        Vector3 c = a.rotate(Vector3.Axis.Z, Math.PI/2);
+        assertEquals(-4, c.getX(), 1e-8);
+        assertEquals(3, c.getY(), 1e-8);
+        assertEquals(5, c.getZ(), 1e-8);
+    }
+
 }

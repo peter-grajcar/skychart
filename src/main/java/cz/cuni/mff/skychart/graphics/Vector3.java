@@ -198,4 +198,41 @@ public class Vector3 {
         }
     }
 
+    /**
+     * Rotates matrix around given axis by given angle. Rotation is done using rotation matrices.
+     *
+     * @param axis axis to rotate around.
+     * @param angle angle to rotate by.
+     * @return rotated vector.
+     */
+    public Vector3 rotate(Axis axis, double angle) {
+        switch (axis) {
+            case X:
+                return new Vector3(
+                        x,
+                        y * Math.cos(angle) - z * Math.sin(angle),
+                        y * Math.sin(angle) + z * Math.cos(angle)
+                );
+            case Y:
+                return new Vector3(
+                        x * Math.cos(angle) + z * Math.sin(angle),
+                        y,
+                        - x * Math.sin(angle) + z * Math.cos(angle)
+                );
+            case Z:
+                return new Vector3(
+                        x * Math.cos(angle) - y * Math.sin(angle),
+                        x * Math.sin(angle) + y * Math.cos(angle),
+                        z
+                );
+            default:
+                return new Vector3(x, y, z);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%.4f, %.4f, %.4f)", getX(), getY(), getZ());
+    }
+
 }

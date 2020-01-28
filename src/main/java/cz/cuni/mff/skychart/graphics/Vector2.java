@@ -80,4 +80,9 @@ public class Vector2 {
             default: return 0;
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%.4f, %.4f)", getX(), getY());
+    }
 }
