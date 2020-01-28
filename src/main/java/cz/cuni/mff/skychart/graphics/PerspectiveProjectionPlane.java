@@ -73,8 +73,17 @@ public class PerspectiveProjectionPlane {
         return new Vector2(x, y);
     }
 
+    public boolean isFront(Vector3 object){
+        Vector3 P = pointOfView.add(direction);
+        return direction.dot(object.subtract(P)) > 0;
+    }
+
     public <T> Vector2 project(T obj, Vector3Mapping<T> mapping) {
         return project(mapping.map(obj));
+    }
+
+    public <T> boolean isFront(T obj, Vector3Mapping<T> mapping) {
+        return isFront(mapping.map(obj));
     }
 
     /**
