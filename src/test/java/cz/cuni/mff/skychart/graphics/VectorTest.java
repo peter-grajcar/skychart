@@ -46,4 +46,11 @@ public class VectorTest {
         assertEquals(norm, product, 1e-8);
     }
 
+    @Test
+    public void testVectorNormalisation() {
+        Vector3 a = new Vector3(1, 4, 2);
+        Vector3 normalised = a.normalise();
+        assertEquals(1, normalised.norm(), 1e-8);
+    }
+
 }

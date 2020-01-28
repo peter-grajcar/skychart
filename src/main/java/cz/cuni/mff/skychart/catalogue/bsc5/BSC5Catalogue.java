@@ -105,6 +105,12 @@ public class BSC5Catalogue implements Catalogue {
 
     private List<Star> stars;
 
+    /**
+     * Loads the BSC5 Catalogue from the file.
+     *
+     * @throws IOException if the reading of the file fails.
+     * @throws BSC5FormatException if the parsing of the file fails.
+     */
     public BSC5Catalogue() throws IOException, BSC5FormatException {
         stars = new ArrayList<>();
 
