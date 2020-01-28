@@ -29,16 +29,14 @@ public class Coordinates {
     }
 
     /**
-     * Computes the Local Sidereal Time (LST) in seconds at given time and location.
+     * Computes the Greenwich Mean Sidereal Time (GMST) in seconds at given time and location.
      *
      * @param time Time
-     * @param location Geographical location
-     * @return Local Sidereal Time
+     * @return Greenwich Mean Sidereal Time
      */
-    public static double getLocalSiderealTime(ZonedDateTime time, Location location) {
+    public static double getGreenwichMeanSiderealTime(ZonedDateTime time) {
         LocalDateTime utc = LocalDateTime.ofInstant(time.toInstant(), ZoneOffset.UTC);
 
-        double longitudeSeconds = location.getLongitude() * 240d; // note: 86400 / 360 = 240
         double universalTime = getUniversalTime(time);
         double epochJ2000 = utc.getLong(JulianFields.JULIAN_DAY) - 2451545.5;
         double Tu = epochJ2000 / 36525d;
@@ -47,7 +45,7 @@ public class Coordinates {
         // omega - Earth's rotation rate (sidereal second / UT second)
         double omega = 1.00273790935 + 5.9e-11 * Tu;
         // add longitude in seconds to get Local Sidereal Time instead of Greenwich
-        double H = H0 + omega * universalTime + longitudeSeconds;
+        double H = H0 + omega * universalTime;
 
         return H % 86400d;
     }
@@ -61,17 +59,17 @@ public class Coordinates {
      * @return Coordinates in horizontal system
      */
     public static HorizontalCoords equatorialToHorizontal(EquatorialCoords eq, ZonedDateTime time, Location location) {
-        double lst = getLocalSiderealTime(time, location);
+        double lst = getGreenwichMeanSiderealTime(time);
 
         // LST needs to be converted from seconds to radians
-        double hourAngle = (lst / 3600 - eq.getRightAscension()) * Math.PI / 12;
+        double hourAngle = (lst / 3600 + location.getLongitude() / 15 - eq.getRightAscension()) * Math.PI / 12;
 
         double alt =  Math.asin(
                 Math.sin(eq.getDeclinationRadians()) * Math.sin(location.getLatitudeRadians())
                         + Math.cos(eq.getDeclinationRadians()) * Math.cos(location.getLatitudeRadians()) * Math.cos(hourAngle)
         );
         double az = Math.acos(
-                (Math.sin(eq.getDeclinationRadians()) - Math.sin(location.getLatitudeRadians() * Math.sin(alt)))
+                (Math.sin(eq.getDeclinationRadians()) - Math.sin(location.getLatitudeRadians()) * Math.sin(alt))
                         / (Math.cos(location.getLatitudeRadians()) * Math.cos(alt))
         );
         az = Math.sin(hourAngle) < 0 ? az : 2*Math.PI - az;

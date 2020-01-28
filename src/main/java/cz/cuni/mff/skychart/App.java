@@ -63,7 +63,7 @@ public class App extends Application {
                     BSC5Star bsc5Star = (BSC5Star) star;
                     HorizontalCoords horizontalCoords = star.getCoords().toHorizontal(
                             time,
-                            new Location(0, 0)
+                            new Location(48.2, 17.4)
                     );
 
                     if (horizontalCoords.getAltitude() < 0) continue;
