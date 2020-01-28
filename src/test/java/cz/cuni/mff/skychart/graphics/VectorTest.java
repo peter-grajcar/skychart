@@ -53,4 +53,14 @@ public class VectorTest {
         assertEquals(1, normalised.norm(), 1e-8);
     }
 
+    @Test
+    public void testCrossProduct() {
+        Vector3 a = new Vector3(1, 4, 2);
+        Vector3 b = new Vector3(3, 4, 1);
+        Vector3 c = a.cross(b);
+        assertEquals(-4, c.getX(), 1e-8);
+        assertEquals(5, c.getY(), 1e-8);
+        assertEquals(-8, c.getZ(), 1e-8);
+    }
+
 }
