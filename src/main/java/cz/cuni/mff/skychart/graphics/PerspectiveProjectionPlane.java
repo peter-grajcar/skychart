@@ -66,11 +66,15 @@ public class PerspectiveProjectionPlane {
         Vector3 v = side;
         Vector3 w = intersection.subtract(P);
 
-        double denom = u.dot(v)*u.dot(v) - u.dot(u) * v.dot(v);
-        double x = (u.dot(v) * w.dot(u) - u.dot(u) * w.dot(v)) / denom;
-        double y = (u.dot(v) * w.dot(v) - v.dot(v) * w.dot(u)) / denom;
+        double denominator = u.dot(v)*u.dot(v) - u.dot(u) * v.dot(v);
+        double x = (u.dot(v) * w.dot(u) - u.dot(u) * w.dot(v)) / denominator;
+        double y = (u.dot(v) * w.dot(v) - v.dot(v) * w.dot(u)) / denominator;
 
         return new Vector2(x, y);
+    }
+
+    public <T> Vector2 project(T obj, Vector3Mapping<T> mapping) {
+        return project(mapping.map(obj));
     }
 
     /**
