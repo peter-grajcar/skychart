@@ -17,9 +17,10 @@ public class BSC5Star extends Star {
      * @return star's name in Bayer designation.
      */
     public String getBayerName() {
+        if(name.isBlank()) return "";
         String letter = name.substring(3, 7).strip();
         String constellation = name.substring(7, 10);
-        return letter + (letter.isBlank() ? "" : " " + constellation);
+        return letter + " " + constellation;
     }
 
     /**
@@ -28,9 +29,10 @@ public class BSC5Star extends Star {
      * @return star's name in Flamsteed designation.
      */
     public String getFlamsteedName() {
+        if(name.isBlank()) return "";
         String number = name.substring(0, 3).strip();
         String constellation = name.substring(7, 10);
-        return number + (number.isBlank() ? "" : " " + constellation);
+        return number + " " + constellation;
     }
 
     /**

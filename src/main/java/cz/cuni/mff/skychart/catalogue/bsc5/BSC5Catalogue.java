@@ -79,7 +79,9 @@ public class BSC5Catalogue implements Catalogue {
         public String asString(String entry) throws BSC5FormatException{
             if(entry.length() != 197)
                 throw new BSC5FormatException("Invalid length of entry.");
-            return entry.substring(this.start, this.end);
+            String field = entry.substring(this.start, this.end);
+            if(field.isBlank()) return "";
+            return field;
         }
 
         /**
