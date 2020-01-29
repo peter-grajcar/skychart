@@ -1,4 +1,4 @@
-package cz.cuni.mff.skychart.graphics;
+package cz.cuni.mff.skychart.projection;
 
 /**
  * created: 28/01/2020

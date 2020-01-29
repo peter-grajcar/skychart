@@ -1,4 +1,4 @@
-package cz.cuni.mff.skychart.graphics;
+package cz.cuni.mff.skychart.projection;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package cz.cuni.mff.skychart.graphics;
+package cz.cuni.mff.skychart.projection;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Peter Grajcar
  */
-public class PerspectiveProjectionPlane {
+public class PerspectiveProjectionPlane implements ProjectionPlane {
 
     private static final Logger logger = LogManager.getLogger(PerspectiveProjectionPlane.class);
 
@@ -87,15 +87,15 @@ public class PerspectiveProjectionPlane {
     }
 
     /**
-     * Calculates and returns the projected coordinates of given object on the plane.
+     * Calculates and returns the projected coordinates of given vector on the plane.
      *
      * <a href="http://geomalgorithms.com/a06-_intersect-2.html">link</a>
      *
-     * @param object an object to project.
-     * @return coordinates of the projected object on the plane.
+     * @param vector a vector to project.
+     * @return coordinates of the projected vector on the plane.
      */
-    public Vector2 project(Vector3 object) {
-        Vector3 intersection = intersection(object);
+    public Vector2 project(Vector3 vector) {
+        Vector3 intersection = intersection(vector);
 
         Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
@@ -114,20 +114,21 @@ public class PerspectiveProjectionPlane {
         return new Vector2(x, y);
     }
 
-    public boolean isFront(Vector3 object, double epsilon){
+
+
+    /**
+     * Returns true if the vector is in front of the picture plane.
+     *
+     * @param vector a vector.
+     * @param epsilon a small number considered zero.
+     * @return true if vector is in front of the plane.
+     */
+    public boolean isFront(Vector3 vector, double epsilon){
         Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
 
         Vector3 P = pov.add(dir);
-        return dir.dot(object.subtract(P)) > epsilon;
-    }
-
-    public <T> Vector2 project(T obj, Vector3Mapping<T> mapping) {
-        return project(mapping.map(obj));
-    }
-
-    public <T> boolean isFront(T obj, Vector3Mapping<T> mapping, double epsilon) {
-        return isFront(mapping.map(obj), epsilon);
+        return dir.dot(vector.subtract(P)) > epsilon;
     }
 
     /**

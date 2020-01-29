@@ -1,4 +1,4 @@
-package cz.cuni.mff.skychart.graphics;
+package cz.cuni.mff.skychart.projection;
 
 /**
  * A functional interface used for mapping objects into three-dimensional vectors.
