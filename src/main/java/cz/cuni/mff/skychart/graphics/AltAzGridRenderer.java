@@ -1,5 +1,6 @@
 package cz.cuni.mff.skychart.graphics;
 
+import cz.cuni.mff.skychart.projection.ProjectionPlane;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -9,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class AltAzGridRenderer extends Renderer {
 
+    private ProjectionPlane projectionPlane;
     private double altitudeStep;
     private double azimuthStep;
 
@@ -17,8 +19,9 @@ public class AltAzGridRenderer extends Renderer {
      *
      * @param context a graphics context.
      */
-    public AltAzGridRenderer(GraphicsContext context) {
+    public AltAzGridRenderer(GraphicsContext context, ProjectionPlane plane) {
         super(context);
+        this.projectionPlane = plane;
         this.altitudeStep = 10;
         this.azimuthStep = 10;
     }
@@ -30,8 +33,8 @@ public class AltAzGridRenderer extends Renderer {
      * @param altitudeStep angle between two altitude lines.
      * @param azimuthStep angle between two azimuth lines.
      */
-    public AltAzGridRenderer(GraphicsContext context, double altitudeStep, double azimuthStep) {
-        super(context);
+    public AltAzGridRenderer(GraphicsContext context, ProjectionPlane plane, double altitudeStep, double azimuthStep) {
+        this(context, plane);
         this.altitudeStep = altitudeStep;
         this.azimuthStep = azimuthStep;
     }

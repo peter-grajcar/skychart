@@ -11,6 +11,11 @@ public abstract class ObjectRenderer<T> {
 
     protected GraphicsContext context;
 
+    /**
+     * Constructs a new object renderer.
+     *
+     * @param context a graphics context.
+     */
     public ObjectRenderer(GraphicsContext context) {
         this.context = context;
     }

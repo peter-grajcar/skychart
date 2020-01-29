@@ -94,6 +94,7 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
      * @param vector a vector to project.
      * @return coordinates of the projected vector on the plane.
      */
+    @Override
     public Vector2 project(Vector3 vector) {
         Vector3 intersection = intersection(vector);
 
@@ -123,6 +124,7 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
      * @param epsilon a small number considered zero.
      * @return true if vector is in front of the plane.
      */
+    @Override
     public boolean isFront(Vector3 vector, double epsilon){
         Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
