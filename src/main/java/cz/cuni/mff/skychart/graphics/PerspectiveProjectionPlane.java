@@ -82,6 +82,10 @@ public class PerspectiveProjectionPlane {
         return new Vector3(0, rotationY, rotationZ);
     }
 
+    public void setDistance(double dist) {
+        direction = direction.normalise().multiply(dist);
+    }
+
     /**
      * Calculates and returns the projected coordinates of given object on the plane.
      *

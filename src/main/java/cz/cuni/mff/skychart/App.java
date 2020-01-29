@@ -17,13 +17,15 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -56,11 +58,13 @@ public class App extends Application {
 
         stage.setTitle(localisation.getString("window.title"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/App.fxml"));
-        Parent root = loader.load();
+        GridPane root = loader.load();
 
         Scene scene = new Scene(root);
 
         Canvas canvas = (Canvas) root.lookup("#canvas");
+        canvas.widthProperty().bind(root.widthProperty());
+        canvas.heightProperty().bind(root.heightProperty());
         canvas.setOnMouseClicked(mouseEvent -> {
           canvas.requestFocus();
         });
@@ -77,6 +81,7 @@ public class App extends Application {
     private void drawStarProjection(Canvas canvas, Scene scene) throws BSC5FormatException, IOException {
         Catalogue catalogue = new BSC5Catalogue();
         List<Star> stars = catalogue.starList();
+        ZonedDateTime time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC);
         Location location = new Location(48.2, 17.4);
 
         PerspectiveProjectionPlane plane = new PerspectiveProjectionPlane(
@@ -90,7 +95,9 @@ public class App extends Application {
 
         DoubleProperty rotationY = new SimpleDoubleProperty();
         DoubleProperty rotationZ = new SimpleDoubleProperty();
-        final double rotationRate = 0.05;
+        DoubleProperty dist = new SimpleDoubleProperty(2);
+        BooleanProperty paused = new SimpleBooleanProperty(false);
+        final double rotationRate = 0.1;
         scene.setOnKeyPressed(keyEvent -> {
             Timeline timeline;
             switch (keyEvent.getCode()) {
@@ -159,15 +166,30 @@ public class App extends Application {
                     timeline.play();
                     keyEvent.consume();
                     break;
+                case M:
+                    dist.setValue(dist.getValue() + 0.5);
+                    break;
+                case N:
+                    if(dist.getValue() > 1)
+                        dist.setValue(dist.getValue() - 0.5);
+                    break;
+                case SPACE:
+                    paused.set(!paused.get());
+                    break;
             }
         });
 
         GraphicsContext context = canvas.getGraphicsContext2D();
         new AnimationTimer() {
+            private long prevTime;
+            private long elapsedTime;
             @Override
             public void handle(long l) {
-                long t = System.nanoTime() - startNanoTime;
-                ZonedDateTime time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC).plusSeconds(t / 10_000_000);
+                long dt = System.nanoTime() - prevTime;
+                prevTime = System.nanoTime();
+                if(!paused.get())
+                    elapsedTime += dt;
+                ZonedDateTime zonedDateTime = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC).plusSeconds(elapsedTime / 10_000_000);
 
                 Vector3Mapping<HorizontalCoords> mapping = coords -> new Vector3(
                             -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.cos(coords.getAzimuthRadians()),
@@ -176,7 +198,7 @@ public class App extends Application {
                     );
 
                 plane.setRotation(rotationY.doubleValue(), rotationZ.doubleValue());
-
+                plane.setDistance(dist.doubleValue());
 
                 // Draw the sky
                 context.setFill(Color.rgb(0, 0, 32));
@@ -188,7 +210,7 @@ public class App extends Application {
                 // Draw the stars
                 context.setFill(Color.WHITE);
                 for (Star star : stars) {
-                    HorizontalCoords coords = star.getCoords().toHorizontal(time, location);
+                    HorizontalCoords coords = star.getCoords().toHorizontal(zonedDateTime, location);
 
                     if(coords.getAltitude() < 0 || !plane.isFront(coords, mapping, 1e-6)) continue;
 

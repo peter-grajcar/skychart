@@ -2,21 +2,29 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <GridPane fx:controller="cz.cuni.mff.skychart.App"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-    <Canvas fx:id="canvas"
-            GridPane.columnIndex="0"
-            GridPane.rowIndex="0"
-            GridPane.columnSpan="2"
-            width="800"
-            height="600"
-            focusTraversable="true" />
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" prefWidth="800" prefHeight="600">
+    <children>
+        <Canvas fx:id="canvas"
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="0"
+                GridPane.columnSpan="2"
+                focusTraversable="true" />
 
-    <HBox spacing="10"
-          alignment="bottom_left"
-          GridPane.columnIndex="1"
-          GridPane.rowIndex="4">
-        <Button text="test"/>
-        <Button text="test"/>
-    </HBox>
+        <HBox spacing="10"
+              alignment="bottom_left"
+              GridPane.columnIndex="0"
+              GridPane.rowIndex="1">
+            <Button text="test"/>
+            <Button text="test"/>
+        </HBox>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="80.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
 </GridPane>
