@@ -41,6 +41,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return String.format("LONG: %.4fdeg, LAT: %.4fdeg", longitude, latitude);
+        return String.format("%.4f\u00B0%c %.4f\u00B0%c", latitude, latitude < 0 ? 'S' : 'N', longitude, longitude < 0 ? 'E' : 'W');
     }
 }

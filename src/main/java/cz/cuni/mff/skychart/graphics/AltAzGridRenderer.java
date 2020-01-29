@@ -1,7 +1,13 @@
 package cz.cuni.mff.skychart.graphics;
 
+import cz.cuni.mff.skychart.astronomy.HorizontalCoords;
 import cz.cuni.mff.skychart.projection.ProjectionPlane;
+import cz.cuni.mff.skychart.projection.Vector2;
+import cz.cuni.mff.skychart.projection.Vector3;
+import cz.cuni.mff.skychart.projection.Vector3Mapping;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * Renders an Altitude-Azimuth grid.
@@ -46,6 +52,52 @@ public class AltAzGridRenderer extends Renderer {
      */
     @Override
     public void render() {
+        Canvas canvas = context.getCanvas();
 
+        Vector3Mapping<HorizontalCoords> mapping = coords -> new Vector3(
+                -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.cos(coords.getAzimuthRadians()),
+                -10 * Math.cos(Math.PI/2 - coords.getAltitudeRadians()),
+                -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.sin(coords.getAzimuthRadians())
+        );
+
+        context.setStroke(Color.rgb(128, 0, 0));
+        for(int j = 0; j < 90; j += 10) {
+            context.beginPath();
+            for (int i = 0; i < 360; ++i) {
+                HorizontalCoords coords = new HorizontalCoords(j, i);
+                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, mapping, 1e-6)) continue;
+
+                Vector2 point = projectionPlane.project(coords, mapping);
+                double x = canvas.getWidth() / 2 + 400 * point.getX();
+                double y = canvas.getHeight() / 2 + 400 * point.getY();
+
+                if (i ==0 ) {
+                    context.moveTo(x, y);
+                }
+                else {
+                    context.lineTo(x, y);
+                }
+            }
+            context.stroke();
+        }
+        for(int j = 0; j < 360; j += 10) {
+            context.beginPath();
+            for (int i = 0; i <= 90; ++i) {
+                HorizontalCoords coords = new HorizontalCoords(i, j);
+                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, mapping, 1e-6)) continue;
+
+                Vector2 point = projectionPlane.project(coords, mapping);
+                double x = canvas.getWidth() / 2 + 400 * point.getX();
+                double y = canvas.getHeight() / 2 + 400 * point.getY();
+
+                if (i ==0 ) {
+                    context.moveTo(x, y);
+                }
+                else {
+                    context.lineTo(x, y);
+                }
+            }
+            context.stroke();
+        }
     }
 }

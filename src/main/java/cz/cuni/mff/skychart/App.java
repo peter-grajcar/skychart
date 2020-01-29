@@ -7,6 +7,7 @@ import cz.cuni.mff.skychart.catalogue.Star;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Catalogue;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5FormatException;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Star;
+import cz.cuni.mff.skychart.graphics.AltAzGridRenderer;
 import cz.cuni.mff.skychart.projection.PerspectiveProjectionPlane;
 import cz.cuni.mff.skychart.projection.Vector2;
 import cz.cuni.mff.skychart.projection.Vector3;
@@ -27,6 +28,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
@@ -181,11 +183,11 @@ public class App extends Application {
 
         GraphicsContext context = canvas.getGraphicsContext2D();
         new AnimationTimer() {
-            private long prevTime;
+            private long prevTime = -1;
             private long elapsedTime;
             @Override
             public void handle(long l) {
-                long dt = System.nanoTime() - prevTime;
+                long dt = prevTime == -1 ? 0 : System.nanoTime() - prevTime;
                 prevTime = System.nanoTime();
                 if(!paused.get())
                     elapsedTime += dt;
@@ -205,10 +207,12 @@ public class App extends Application {
                 context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
                 // Draw the alt-az grid
-                drawAltAzGrid(canvas, plane, mapping);
+                AltAzGridRenderer gridRenderer = new AltAzGridRenderer(context, plane);
+                gridRenderer.render();
 
                 // Draw the stars
                 context.setFill(Color.WHITE);
+                context.setFont(Font.font(8));
                 for (Star star : stars) {
                     HorizontalCoords coords = star.getCoords().toHorizontal(zonedDateTime, location);
 
@@ -228,54 +232,12 @@ public class App extends Application {
                     }
                 }
 
+                context.setFont(Font.font("Courier New", 12));
+                context.fillText(zonedDateTime.toString(), 10, canvas.getHeight() - 30);
+                context.fillText(location.toString(), 10, canvas.getHeight() - 15);
             }
         }.start();
 
-    }
-
-    private void drawAltAzGrid(Canvas canvas, PerspectiveProjectionPlane plane, Vector3Mapping mapping) {
-        GraphicsContext context = canvas.getGraphicsContext2D();
-        // Draw an alt-az grid
-        context.setStroke(Color.rgb(128, 0, 0));
-        for(int j = 0; j < 90; j += 10) {
-            context.beginPath();
-            for (int i = 0; i < 360; ++i) {
-                HorizontalCoords coords = new HorizontalCoords(j, i);
-                if (coords.getAltitude() < 0 || !plane.isFront(coords, mapping, 1e-6)) continue;
-
-                Vector2 point = plane.project(coords, mapping);
-                double x = canvas.getWidth() / 2 + 400 * point.getX();
-                double y = canvas.getHeight() / 2 + 400 * point.getY();
-
-                if (i ==0 ) {
-                    context.moveTo(x, y);
-                }
-                else {
-                    context.lineTo(x, y);
-                }
-                //context.fillOval(x - 2, y - 2, 4, 4);
-            }
-            context.stroke();
-        }
-        for(int j = 0; j < 360; j += 10) {
-            context.beginPath();
-            for (int i = 0; i <= 90; ++i) {
-                HorizontalCoords coords = new HorizontalCoords(i, j);
-                if (coords.getAltitude() < 0 || !plane.isFront(coords, mapping, 1e-6)) continue;
-
-                Vector2 point = plane.project(coords, mapping);
-                double x = canvas.getWidth() / 2 + 400 * point.getX();
-                double y = canvas.getHeight() / 2 + 400 * point.getY();
-
-                if (i ==0 ) {
-                    context.moveTo(x, y);
-                }
-                else {
-                    context.lineTo(x, y);
-                }
-            }
-            context.stroke();
-        }
     }
 
     private void drawCube(Canvas canvas) {
