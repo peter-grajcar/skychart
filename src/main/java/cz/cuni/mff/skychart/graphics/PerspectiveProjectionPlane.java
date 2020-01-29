@@ -23,6 +23,8 @@ public class PerspectiveProjectionPlane {
     private Vector3 up;
     private Vector3 side;
 
+    private double rotationY, rotationZ;
+
     /**
      * Constructs a projection plane with initial point of view, direction of view, and base vectors of the plane.
      *
@@ -44,10 +46,40 @@ public class PerspectiveProjectionPlane {
      * @param angle angle in radians.
      */
     public void rotate(Vector3.Axis axis, double angle) {
-        pointOfView = pointOfView.rotate(axis, angle);
+        /*pointOfView = pointOfView.rotate(axis, angle);
         direction = direction.rotate(axis, angle);
         up = up.rotate(axis, angle);
-        side = side.rotate(axis, angle);
+        side = side.rotate(axis, angle);*/
+        switch (axis){
+            case Z:
+                rotationZ += angle;
+                break;
+            case Y:
+                rotationY += angle;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Sets rotation of the view.
+     *
+     * @param rotationY angle about y axis.
+     * @param rotationZ angle about z axis.
+     */
+    public void setRotation(double rotationY, double rotationZ) {
+        this.rotationY = rotationY;
+        this.rotationZ = rotationZ;
+    }
+
+    /**
+     * Returns actual rotation.
+     *
+     * @return vector with angles about each axis.
+     */
+    public Vector3 getRotation() {
+        return new Vector3(0, rotationY, rotationZ);
     }
 
     /**
@@ -61,9 +93,14 @@ public class PerspectiveProjectionPlane {
     public Vector2 project(Vector3 object) {
         Vector3 intersection = intersection(object);
 
-        Vector3 P = pointOfView.add(direction);
-        Vector3 u = up;
-        Vector3 v = side;
+        Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 upRot = up.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 sideRot = side.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+
+        Vector3 P = pov.add(dir);
+        Vector3 u = upRot;
+        Vector3 v = sideRot;
         Vector3 w = intersection.subtract(P);
 
         double denominator = u.dot(v)*u.dot(v) - u.dot(u) * v.dot(v);
@@ -74,8 +111,11 @@ public class PerspectiveProjectionPlane {
     }
 
     public boolean isFront(Vector3 object){
-        Vector3 P = pointOfView.add(direction);
-        return direction.dot(object.subtract(P)) > 0;
+        Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+
+        Vector3 P = pov.add(dir);
+        return dir.dot(object.subtract(P)) > 0;
     }
 
     public <T> Vector2 project(T obj, Vector3Mapping<T> mapping) {
@@ -95,14 +135,16 @@ public class PerspectiveProjectionPlane {
      * @return the intersection point.
      */
     private Vector3 intersection(Vector3 object) {
+        Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         // Defines a ray from the object to the point of view.
         // R(t) = O + u * t
-        Vector3 u = pointOfView.subtract(object);
+        Vector3 u = pov.subtract(object);
         // A point on the picture plane
-        Vector3 P = pointOfView.add(direction);
+        Vector3 P = pov.add(dir);
         Vector3 w = object.subtract(P);
 
-        double t = - direction.dot(w) / direction.dot(u);
+        double t = - dir.dot(w) / dir.dot(u);
         return object.add(u.multiply(t));
     }
 
@@ -112,7 +154,9 @@ public class PerspectiveProjectionPlane {
      * @return an unit vector perpendicular to the direction vector and upward vector.
      */
     private Vector3 getSide() {
-        return direction.cross(up).normalise();
+        Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 upRot = up.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        return dir.cross(upRot).normalise();
     }
 
 }
