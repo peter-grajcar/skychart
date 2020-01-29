@@ -167,7 +167,7 @@ public class App extends Application {
             @Override
             public void handle(long l) {
                 long t = System.nanoTime() - startNanoTime;
-                ZonedDateTime time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC).plusSeconds(t / 5_000_000);
+                ZonedDateTime time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC).plusSeconds(t / 10_000_000);
 
                 Vector3Mapping<HorizontalCoords> mapping = coords -> new Vector3(
                             -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.cos(coords.getAzimuthRadians()),
@@ -177,14 +177,20 @@ public class App extends Application {
 
                 plane.setRotation(rotationY.doubleValue(), rotationZ.doubleValue());
 
-                //Draw the stars
+
+                // Draw the sky
                 context.setFill(Color.rgb(0, 0, 32));
                 context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                // Draw the alt-az grid
+                drawAltAzGrid(canvas, plane, mapping);
+
+                // Draw the stars
                 context.setFill(Color.WHITE);
                 for (Star star : stars) {
                     HorizontalCoords coords = star.getCoords().toHorizontal(time, location);
 
-                    if(coords.getAltitude() < 0 || !plane.isFront(coords, mapping)) continue;
+                    if(coords.getAltitude() < 0 || !plane.isFront(coords, mapping, 1e-6)) continue;
 
                     BSC5Star bsc5Star = (BSC5Star) star;
 
@@ -203,6 +209,51 @@ public class App extends Application {
             }
         }.start();
 
+    }
+
+    private void drawAltAzGrid(Canvas canvas, PerspectiveProjectionPlane plane, Vector3Mapping mapping) {
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        // Draw an alt-az grid
+        context.setStroke(Color.rgb(128, 0, 0));
+        for(int j = 0; j < 90; j += 10) {
+            context.beginPath();
+            for (int i = 0; i < 360; ++i) {
+                HorizontalCoords coords = new HorizontalCoords(j, i);
+                if (coords.getAltitude() < 0 || !plane.isFront(coords, mapping, 1e-6)) continue;
+
+                Vector2 point = plane.project(coords, mapping);
+                double x = canvas.getWidth() / 2 + 400 * point.getX();
+                double y = canvas.getHeight() / 2 + 400 * point.getY();
+
+                if (i ==0 ) {
+                    context.moveTo(x, y);
+                }
+                else {
+                    context.lineTo(x, y);
+                }
+                //context.fillOval(x - 2, y - 2, 4, 4);
+            }
+            context.stroke();
+        }
+        for(int j = 0; j < 360; j += 10) {
+            context.beginPath();
+            for (int i = 0; i <= 90; ++i) {
+                HorizontalCoords coords = new HorizontalCoords(i, j);
+                if (coords.getAltitude() < 0 || !plane.isFront(coords, mapping, 1e-6)) continue;
+
+                Vector2 point = plane.project(coords, mapping);
+                double x = canvas.getWidth() / 2 + 400 * point.getX();
+                double y = canvas.getHeight() / 2 + 400 * point.getY();
+
+                if (i ==0 ) {
+                    context.moveTo(x, y);
+                }
+                else {
+                    context.lineTo(x, y);
+                }
+            }
+            context.stroke();
+        }
     }
 
     private void drawCube(Canvas canvas) {

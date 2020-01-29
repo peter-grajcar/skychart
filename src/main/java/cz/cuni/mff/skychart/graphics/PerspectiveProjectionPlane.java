@@ -110,20 +110,20 @@ public class PerspectiveProjectionPlane {
         return new Vector2(x, y);
     }
 
-    public boolean isFront(Vector3 object){
+    public boolean isFront(Vector3 object, double epsilon){
         Vector3 pov = pointOfView.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
 
         Vector3 P = pov.add(dir);
-        return dir.dot(object.subtract(P)) > 0;
+        return dir.dot(object.subtract(P)) > epsilon;
     }
 
     public <T> Vector2 project(T obj, Vector3Mapping<T> mapping) {
         return project(mapping.map(obj));
     }
 
-    public <T> boolean isFront(T obj, Vector3Mapping<T> mapping) {
-        return isFront(mapping.map(obj));
+    public <T> boolean isFront(T obj, Vector3Mapping<T> mapping, double epsilon) {
+        return isFront(mapping.map(obj), epsilon);
     }
 
     /**
