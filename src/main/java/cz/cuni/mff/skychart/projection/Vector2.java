@@ -1,12 +1,15 @@
 package cz.cuni.mff.skychart.projection;
 
 /**
- * created: 28/01/2020
+ * A class representing two-dimensional vector.
  *
  * @author Peter Grajcar
  */
 public class Vector2 {
 
+    /**
+     * Named axes of two-dimensional vector.
+     */
     public static enum Axis {
         X, Y;
     }

@@ -7,6 +7,9 @@ package cz.cuni.mff.skychart.projection;
  */
 public class Vector3 {
 
+    /**
+     * Named axes of three-dimensional vector.
+     */
     public static enum Axis {
         X, Y, Z;
     }
@@ -119,6 +122,7 @@ public class Vector3 {
     /**
      * Returns the sum of vector and a scalar value.
      *
+     * @param n a scalar multiplier.
      * @return sum vector and a scalar value.
      */
     public Vector3 multiply(double n) {
@@ -128,6 +132,8 @@ public class Vector3 {
     /**
      * Returns a vector divided by a scalar value.
      *
+     *
+     * @param n a scalar divisor.
      * @return divided vector.
      */
     public Vector3 divide(double n) {
@@ -137,6 +143,7 @@ public class Vector3 {
     /**
      * Returns the dot product of two vectors.
      *
+     * @param other the other vector.
      * @return dot product.
      */
     public double dot(Vector3 other) {
@@ -146,6 +153,7 @@ public class Vector3 {
     /**
      * Returns the cross product of two vectors.
      *
+     * @param other the other vector.
      * @return cross product.
      */
     public Vector3 cross(Vector3 other) {

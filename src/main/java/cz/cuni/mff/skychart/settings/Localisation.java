@@ -15,7 +15,7 @@ public class Localisation {
 
     /**
      * Sets a new user's locale.
-     * @param locale
+     * @param locale a new locale.
      */
     public static void setLocale(Locale locale) {
         Preferences prefs = Preferences.userNodeForPackage(cz.cuni.mff.skychart.App.class);

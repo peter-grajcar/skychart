@@ -4,7 +4,7 @@ import cz.cuni.mff.skychart.projection.ProjectionPlane;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- * Renders Altitude-Azimuth grid.
+ * Renders an Altitude-Azimuth grid.
  *
  * @author Peter Grajcar
  */
@@ -15,9 +15,10 @@ public class AltAzGridRenderer extends Renderer {
     private double azimuthStep;
 
     /**
-     * Constructs a new Altitude-Azimuth grid renderer with default angles between the grid lines (10 degrees).
+     * Constructs a new altitude-azimuth grid renderer with default angles between the grid lines (10 degrees).
      *
      * @param context a graphics context.
+     * @param plane a projection plane.
      */
     public AltAzGridRenderer(GraphicsContext context, ProjectionPlane plane) {
         super(context);
@@ -30,6 +31,7 @@ public class AltAzGridRenderer extends Renderer {
      * Constructs a new altitude-azimuth grid renderer with given angles between the grid lines.
      *
      * @param context a graphics context.
+     * @param plane a projection plane.
      * @param altitudeStep angle between two altitude lines.
      * @param azimuthStep angle between two azimuth lines.
      */

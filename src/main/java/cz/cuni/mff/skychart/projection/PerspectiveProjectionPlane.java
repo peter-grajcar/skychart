@@ -82,6 +82,11 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
         return new Vector3(0, rotationY, rotationZ);
     }
 
+    /**
+     * Sets the distance to the picture plane.
+     *
+     * @param dist a new distance to the picture plane.
+     */
     public void setDistance(double dist) {
         direction = direction.normalise().multiply(dist);
     }
