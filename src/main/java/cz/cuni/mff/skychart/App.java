@@ -19,7 +19,8 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.Group;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -54,23 +55,26 @@ public class App extends Application {
         ResourceBundle localisation = Localisation.getBundle();
 
         stage.setTitle(localisation.getString("window.title"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/App.fxml"));
+        Parent root = loader.load();
 
-        Group root = new Group();
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root);
 
-        Canvas canvas = new Canvas(800, 600);
-
-        root.getChildren().addAll(canvas);
-        stage.setScene(scene);
+        Canvas canvas = (Canvas) root.lookup("#canvas");
+        canvas.setOnMouseClicked(mouseEvent -> {
+          canvas.requestFocus();
+        });
 
         //drawStars(canvas);
         //drawCube(canvas);
-        drawStarProjection(canvas);
+        drawStarProjection(canvas, scene);
 
+        stage.setScene(scene);
         stage.show();
     }
 
-    private void drawStarProjection(Canvas canvas) throws BSC5FormatException, IOException {
+
+    private void drawStarProjection(Canvas canvas, Scene scene) throws BSC5FormatException, IOException {
         Catalogue catalogue = new BSC5Catalogue();
         List<Star> stars = catalogue.starList();
         Location location = new Location(48.2, 17.4);
@@ -87,7 +91,7 @@ public class App extends Application {
         DoubleProperty rotationY = new SimpleDoubleProperty();
         DoubleProperty rotationZ = new SimpleDoubleProperty();
         final double rotationRate = 0.05;
-        canvas.getScene().setOnKeyPressed(keyEvent -> {
+        scene.setOnKeyPressed(keyEvent -> {
             Timeline timeline;
             switch (keyEvent.getCode()) {
                 case RIGHT:
@@ -105,6 +109,7 @@ public class App extends Application {
                             )
                     );
                     timeline.play();
+                    keyEvent.consume();
                     break;
                 case LEFT:
                     timeline = new Timeline(
@@ -120,6 +125,7 @@ public class App extends Application {
                             )
                     );
                     timeline.play();
+                    keyEvent.consume();
                     break;
                 case UP:
                     timeline = new Timeline(
@@ -135,6 +141,7 @@ public class App extends Application {
                             )
                     );
                     timeline.play();
+                    keyEvent.consume();
                     break;
                 case DOWN:
                     timeline = new Timeline(
@@ -150,6 +157,7 @@ public class App extends Application {
                             )
                     );
                     timeline.play();
+                    keyEvent.consume();
                     break;
             }
         });

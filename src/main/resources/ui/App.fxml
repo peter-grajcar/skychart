@@ -1,0 +1,22 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<GridPane fx:controller="cz.cuni.mff.skychart.App"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+    <Canvas fx:id="canvas"
+            GridPane.columnIndex="0"
+            GridPane.rowIndex="0"
+            GridPane.columnSpan="2"
+            width="800"
+            height="600"
+            focusTraversable="true" />
+
+    <HBox spacing="10"
+          alignment="bottom_left"
+          GridPane.columnIndex="1"
+          GridPane.rowIndex="4">
+        <Button text="test"/>
+        <Button text="test"/>
+    </HBox>
+</GridPane>
