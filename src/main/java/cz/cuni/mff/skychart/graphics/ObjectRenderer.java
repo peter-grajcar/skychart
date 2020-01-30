@@ -54,7 +54,7 @@ public abstract class ObjectRenderer<T> {
      * @param point a position of the object.
      * @param obj an object to render.
      */
-    public void render(Vector2 point, T obj) {
+    public final void render(Vector2 point, T obj) {
         render(point.getX(), point.getY(), obj);
     }
 

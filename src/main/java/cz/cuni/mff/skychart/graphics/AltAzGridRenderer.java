@@ -1,10 +1,7 @@
 package cz.cuni.mff.skychart.graphics;
 
 import cz.cuni.mff.skychart.astronomy.HorizontalCoords;
-import cz.cuni.mff.skychart.projection.ProjectionPlane;
-import cz.cuni.mff.skychart.projection.Vector2;
-import cz.cuni.mff.skychart.projection.Vector3;
-import cz.cuni.mff.skychart.projection.Vector3Mapping;
+import cz.cuni.mff.skychart.projection.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -108,10 +105,14 @@ public class AltAzGridRenderer extends Renderer {
     public void render() {
         Canvas canvas = context.getCanvas();
 
-        Vector3Mapping<HorizontalCoords> mapping = coords -> new Vector3(
+        Vector3Mapping<HorizontalCoords> horizontalCoordsMapping = coords -> new Vector3(
                 -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.cos(coords.getAzimuthRadians()),
                 -10 * Math.cos(Math.PI/2 - coords.getAltitudeRadians()),
                 -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.sin(coords.getAzimuthRadians())
+        );
+        Vector2Mapping<Vector2> planeCoordsMapping = point -> new Vector2(
+                canvas.getWidth() / 2 + 400 * point.getX(),
+                canvas.getHeight() / 2 + 400 * point.getY()
         );
 
         context.setStroke(Color.rgb(128, 0, 0));
@@ -119,17 +120,16 @@ public class AltAzGridRenderer extends Renderer {
             context.beginPath();
             for (int i = 0; i < 360; ++i) {
                 HorizontalCoords coords = new HorizontalCoords(j, i);
-                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, mapping, 1e-6)) continue;
+                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6)) continue;
 
-                Vector2 point = projectionPlane.project(coords, mapping);
-                double x = canvas.getWidth() / 2 + 400 * point.getX();
-                double y = canvas.getHeight() / 2 + 400 * point.getY();
+                Vector2 point = projectionPlane.project(coords, horizontalCoordsMapping);
+                Vector2 screenPoint = planeCoordsMapping.map(point);
 
                 if (i ==0 ) {
-                    context.moveTo(x, y);
+                    context.moveTo(screenPoint.getX(), screenPoint.getY());
                 }
                 else {
-                    context.lineTo(x, y);
+                    context.lineTo(screenPoint.getX(), screenPoint.getY());
                 }
             }
             context.stroke();
@@ -138,17 +138,16 @@ public class AltAzGridRenderer extends Renderer {
             context.beginPath();
             for (int i = 0; i <= 90; ++i) {
                 HorizontalCoords coords = new HorizontalCoords(i, j);
-                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, mapping, 1e-6)) continue;
+                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6)) continue;
 
-                Vector2 point = projectionPlane.project(coords, mapping);
-                double x = canvas.getWidth() / 2 + 400 * point.getX();
-                double y = canvas.getHeight() / 2 + 400 * point.getY();
+                Vector2 point = projectionPlane.project(coords, horizontalCoordsMapping);
+                Vector2 screenPoint = planeCoordsMapping.map(point);
 
                 if (i ==0 ) {
-                    context.moveTo(x, y);
+                    context.moveTo(screenPoint.getX(), screenPoint.getY());
                 }
                 else {
-                    context.lineTo(x, y);
+                    context.lineTo(screenPoint.getX(), screenPoint.getY());
                 }
             }
             context.stroke();
