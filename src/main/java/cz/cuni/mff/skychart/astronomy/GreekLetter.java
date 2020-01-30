@@ -72,8 +72,8 @@ public enum GreekLetter {
     /**
      * Returns a greek letter matching the abbreviation.
      *
-     * @param abbr an abbrviation of the letter's name.
-     * @return
+     * @param abbr an abbreviation of the letter's name.
+     * @return a greek letter matching the abbreviation.
      */
     public static GreekLetter fromAbbr(String abbr) {
         for(GreekLetter letter : GreekLetter.values()) {

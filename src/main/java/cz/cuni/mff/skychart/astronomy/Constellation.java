@@ -14,7 +14,7 @@ public enum Constellation {
     ARA("Ara", "Ara", "Arae"),
     ARIES("Ari", "Aries", "Arietis"),
     AURIGA("Aur", "Auriga", "Aurigae"),
-    BOOTES("Boo", "Bootes", "Bootis"),
+    BOOTES("Boo", "Bo\u00F6tes", "Bo\u00F6tis"),
     CAELUM("Cae", "Caelum", "Caeli"),
     CAMELOPARDALIS("Cam", "Camelopardalis", "Camelopardalis"),
     CANCER("Cnc", "Cancer", "Cancri"),

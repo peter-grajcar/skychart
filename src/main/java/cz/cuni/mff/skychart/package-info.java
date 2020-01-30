@@ -1,5 +1,5 @@
 /**
- * An application that visualises the night sky.
+ * An application which visualises the night sky.
  *
  * @author Peter Grajcar
  */

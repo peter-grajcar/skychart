@@ -84,7 +84,7 @@ public enum BSC5Field {
     }
 
     /**
-     * Extracts the field from given entry as String.
+     * Extracts the field from given entry as {@code String}.
      *
      * @param entry an entry from BSC5 catalogue.
      * @return a string matching the field in the entry.
@@ -99,7 +99,7 @@ public enum BSC5Field {
     }
 
     /**
-     * Extracts the field from given entry as double.
+     * Extracts the field from given entry as {@code double}.
      *
      * @param entry an entry from BSC5 catalogue.
      * @return a double matching the field in the entry.

@@ -119,7 +119,7 @@ public class AltAzGridRenderer extends Renderer {
         context.setLineWidth(1);
         for(int j = 0; j < 90; j += 10) {
             context.beginPath();
-            for (int i = 0; i < 360; ++i) {
+            for (int i = 0; i <= 360; ++i) {
                 HorizontalCoords coords = new HorizontalCoords(j, i);
                 if (!projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6))
                     continue;

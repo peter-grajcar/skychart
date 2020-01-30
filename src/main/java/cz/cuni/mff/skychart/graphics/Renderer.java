@@ -33,6 +33,9 @@ public abstract class Renderer {
         this.context = context;
     }
 
+    /**
+     * renders the entity.
+     */
     public abstract void render();
 
 }

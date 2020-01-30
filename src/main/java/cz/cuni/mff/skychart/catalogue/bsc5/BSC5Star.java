@@ -14,6 +14,7 @@ public class BSC5Star extends Star {
 
     private String entry;
 
+
     /**
      * Returns the original entry from the BSC5 catalogue.
      *
@@ -23,6 +24,11 @@ public class BSC5Star extends Star {
         return entry;
     }
 
+    /**
+     * Returns the field from the entry from the BSC5 catalogue as {@code String}.
+     *
+     * @return the field from the catalogue as {@code String}.
+     */
     public String getString(BSC5Field field) {
         try {
             return field.asString(this.entry);
@@ -31,6 +37,12 @@ public class BSC5Star extends Star {
         }
     }
 
+    /**
+     * Returns the field from the entry from the BSC5 catalogue as {@code double}.
+     *
+     * @return the field from the catalogue as {@code double}.
+     * @throws NumberFormatException if unable to interpret the field as number.
+     */
     public double getDouble(BSC5Field field) throws NumberFormatException {
         try {
             return field.asDouble(this.entry);

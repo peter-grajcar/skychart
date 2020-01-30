@@ -13,26 +13,56 @@ public class Star {
     protected EquatorialCoords coords;
     protected double visualMagnitude;
 
+    /**
+     * Returns the name of the star.
+     *
+     * @return the name of the star.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets a new name of the star.
+     *
+     * @param name a name of the star.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the equatorial coordinates of the star.
+     *
+     * @return the equatorial coordinates of the star.
+     */
     public EquatorialCoords getCoords() {
         return coords;
     }
 
+    /**
+     * Sets a new equatorial coordinates of the star.
+     *
+     * @param coords an equatorial coordinates of the star.
+     */
     public void setCoords(EquatorialCoords coords) {
         this.coords = coords;
     }
 
+    /**
+     * Returns the visual magnitude of the star.
+     *
+     * @return the visual magnitude of the star.
+     */
     public double getVisualMagnitude() {
         return visualMagnitude;
     }
 
+    /**
+     * Sets a new visual magnitude of the star.
+     *
+     * @param visualMagnitude an visual magnitude of the star.
+     */
     public void setVisualMagnitude(double visualMagnitude) {
         this.visualMagnitude = visualMagnitude;
     }

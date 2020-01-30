@@ -214,6 +214,11 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
                 .rotate(Vector3.Axis.Y, rotationY);
     }
 
+    /**
+     * Returns the center point of the picture plane.
+     *
+     * @return the center point of the picture plane.
+     */
     public Vector3 getPlaneCenter() {
         return pointOfView.add(getForward().multiply(getDistance()));
     }

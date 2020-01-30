@@ -1,7 +1,7 @@
 package cz.cuni.mff.skychart.projection;
 
 /**
- * An interface for projection planes;
+ * An interface for projection planes.
  *
  * @author Peter Grajcar
  */
