@@ -1,7 +1,8 @@
-package cz.cuni.mff.skychart.graphics;
+package cz.cuni.mff.skychart.graphics.bsc5;
 
 import cz.cuni.mff.skychart.catalogue.Star;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Star;
+import cz.cuni.mff.skychart.graphics.StarRenderer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -82,8 +83,8 @@ public class BSC5StarRenderer extends StarRenderer {
         context.fillOval(x - size / 2, y - size / 2, size, size);
 
         if(star.getVisualMagnitude() < 2.0) {
-            context.setFont(Font.font(8));
-            context.fillText(star.getBayerName(), x + 4, y + 4);
+            context.setFont(Font.font(10));
+            context.fillText(star.getBayerName(), x + 6, y + 4);
         }
     }
 }

@@ -84,6 +84,44 @@ public class Vector2 {
         }
     }
 
+    /**
+     * Returns the sum of two vectors.
+     *
+     * @param other the other vector
+     * @return the sum of two vectors.
+     */
+    public Vector2 add(Vector2 other) {
+        return new Vector2(x + other.x, y + other.y);
+    }
+
+    /**
+     * Returns the difference of two vectors.
+     *
+     * @param other the other vector
+     * @return the difference of two vectors.
+     */
+    public Vector2 subtract(Vector2 other) {
+        return new Vector2(x - other.x, y - other.y);
+    }
+
+    /**
+     * Returns the norm of the vector.
+     *
+     * @return the norm.
+     */
+    public double norm() {
+        return Math.sqrt(this.normSquared());
+    }
+
+    /**
+     * Returns the squared norm of the vector.
+     *
+     * @return the squared norm.
+     */
+    public double normSquared() {
+        return x * x + y * y;
+    }
+
     @Override
     public String toString() {
         return String.format("(%.4f, %.4f)", getX(), getY());

@@ -52,6 +52,6 @@ public class HorizontalCoords {
 
     @Override
     public String toString() {
-        return String.format("ALT: %.4fdeg, AZ: %.4fdeg", altitude, azimuth);
+        return String.format("ALT%+.4f\u00B0, AZ%+.4f\u00B0", altitude, azimuth);
     }
 }

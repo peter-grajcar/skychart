@@ -6,9 +6,8 @@ import cz.cuni.mff.skychart.catalogue.Catalogue;
 import cz.cuni.mff.skychart.catalogue.Star;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Catalogue;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5FormatException;
-import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Star;
 import cz.cuni.mff.skychart.graphics.AltAzGridRenderer;
-import cz.cuni.mff.skychart.graphics.BSC5StarRenderer;
+import cz.cuni.mff.skychart.graphics.bsc5.BSC5StarRenderer;
 import cz.cuni.mff.skychart.projection.*;
 import cz.cuni.mff.skychart.settings.Localisation;
 import javafx.animation.AnimationTimer;
@@ -199,7 +198,6 @@ public class App extends Application {
 
         new AnimationTimer() {
             private long prevTime = -1;
-            private long elapsedTime;
             @Override
             public void handle(long l) {
                 long dt = prevTime == -1 ? 0 : System.nanoTime() - prevTime;
@@ -239,50 +237,36 @@ public class App extends Application {
                 context.setFont(Font.font("Courier New", 12));
                 context.fillText(time.toString(), 10, canvas.getHeight() - 30);
                 context.fillText(location.toString(), 10, canvas.getHeight() - 15);
+
+                // Selected star info
+                if(selectedStar != null) {
+                    context.setFill(Color.rgb(0, 0, 0, 0.5));
+                    context.fillRect(5, 15, 300, 100);
+                    context.setFill(Color.WHITE);
+                    context.fillText(selectedStar.toString(), 10, 30);
+                }
             }
         }.start();
 
-        for (Star star : stars) {
-            BSC5Star bsc5Star = (BSC5Star) star;
-            if(bsc5Star.getBayerName().equals("Alp CMa")) {
-                logger.debug(star.getCoords().toHorizontal(time, location));
-            }
-        }
-
+        // Select star
         canvas.setOnMouseClicked(mouseEvent -> {
             Vector2 point = new Vector2(mouseEvent.getX(), mouseEvent.getY());
-            Vector2 pointOnPlane = screenToPlaneMapping.map(point);
-            HorizontalCoords coords = pointOnPlaneToHorizontalCoords(pointOnPlane, plane);
 
             Star closest = null;
             double closestDistance = 0;
             for (Star star : stars) {
-                HorizontalCoords starCoords = star.getCoords().toHorizontal(time, location);
-                double dAlt = coords.getAltitude() - starCoords.getAltitude();
-                double dAz = coords.getAzimuth() - starCoords.getAzimuth();
-                double distance = dAlt * dAlt + dAz * dAz;
+                HorizontalCoords coords = star.getCoords().toHorizontal(time, location);
+                Vector2 starPoint = planeToScreenMapping.map(plane.project(coords, horizontalCoordsMapping));
+                double distance = starPoint.subtract(point).normSquared();
                 if(closest == null || distance < closestDistance) {
                     closest = star;
                     closestDistance = distance;
                 }
 
             }
-            logger.debug( closest);
             selectedStar = closest;
         });
 
-    }
-
-    private HorizontalCoords pointOnPlaneToHorizontalCoords(Vector2 point, PerspectiveProjectionPlane plane) {
-        Vector3 planeRotation = plane.getRotation();
-        double angleZ = Math.atan(point.getY() / plane.getDistance());
-        double angleY = Math.atan(point.getX() / plane.getDistance());
-
-        HorizontalCoords horizontalCoords =  new HorizontalCoords();
-        horizontalCoords.setAltitudeRadians(-planeRotation.getZ() - angleZ);
-        horizontalCoords.setAzimuthRadians(Math.PI-planeRotation.getY() + angleY);
-
-        return horizontalCoords;
     }
 
 }

@@ -36,7 +36,7 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
         this.pointOfView = pov;
         this.direction = dir;
         this.up = up.normalise();
-        this.side = getSide();
+        this.side = calcSide();
     }
 
     /**
@@ -170,14 +170,25 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
     }
 
     /**
+     *
+     *
+     * @return
+     */
+    private Vector3 calcSide() {
+        Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        Vector3 upRot = up.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
+        return dir.cross(upRot).normalise();
+    }
+
+    /**
      * Returns a normalised vector perpendicular to the direction of view and upward vector.
      *
      * @return an unit vector perpendicular to the direction vector and upward vector.
      */
     public Vector3 getSide() {
-        Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
-        Vector3 upRot = up.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
-        return dir.cross(upRot).normalise();
+        return side.normalise()
+                .rotate(Vector3.Axis.Z, rotationZ)
+                .rotate(Vector3.Axis.Y, rotationY);
     }
 
     /**
@@ -190,5 +201,20 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
         return direction.normalise()
                 .rotate(Vector3.Axis.Z, rotationZ)
                 .rotate(Vector3.Axis.Y, rotationY);
+    }
+
+    /**
+     * Returns a normalised vector pointing upwards.
+     *
+     * @return an unit vector pointing upwards.
+     */
+    public Vector3 getUp() {
+        return up.normalise()
+                .rotate(Vector3.Axis.Z, rotationZ)
+                .rotate(Vector3.Axis.Y, rotationY);
+    }
+
+    public Vector3 getPlaneCenter() {
+        return pointOfView.add(getForward().multiply(getDistance()));
     }
 }

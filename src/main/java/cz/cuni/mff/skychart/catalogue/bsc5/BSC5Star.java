@@ -1,6 +1,8 @@
 package cz.cuni.mff.skychart.catalogue.bsc5;
 
+import cz.cuni.mff.skychart.astronomy.Constellation;
 import cz.cuni.mff.skychart.astronomy.EquatorialCoords;
+import cz.cuni.mff.skychart.astronomy.GreekLetter;
 import cz.cuni.mff.skychart.catalogue.Star;
 import static cz.cuni.mff.skychart.catalogue.bsc5.BSC5Catalogue.BSC5Field;
 
@@ -18,9 +20,26 @@ public class BSC5Star extends Star {
      */
     public String getBayerName() {
         if(name.isBlank()) return "";
-        String letter = name.substring(3, 7).strip();
+        String letterAbbr = name.substring(3, 7).strip();
+        if(letterAbbr.isBlank()) return "";
+        GreekLetter letter = GreekLetter.fromAbbr(letterAbbr);
         String constellation = name.substring(7, 10);
-        return letter + " " + constellation;
+        return letter.getSymbol() + " " + constellation;
+    }
+
+    /**
+     * Returns star's name as combination of a greek or latin letter and constellation name (Bayer designation).
+     *
+     * @return star's name in Bayer designation.
+     */
+    public String getBayerFullName() {
+        if(name.isBlank()) return "";
+        String letterAbbr = name.substring(3, 7).strip();
+        if(letterAbbr.isBlank()) return "";
+        GreekLetter letter = GreekLetter.fromAbbr(letterAbbr);
+        String constellationAbbr = name.substring(7, 10);
+        Constellation constellation = Constellation.fromAbbr(constellationAbbr);
+        return letter.getName() + " " + (constellation == null ? constellationAbbr : constellation.getGenitive());
     }
 
     /**
@@ -31,8 +50,23 @@ public class BSC5Star extends Star {
     public String getFlamsteedName() {
         if(name.isBlank()) return "";
         String number = name.substring(0, 3).strip();
+        if(number.isBlank()) return "";
         String constellation = name.substring(7, 10);
         return number + " " + constellation;
+    }
+
+    /**
+     * Returns star's name as combination of a number and constellation name (Flamsteed designation).
+     *
+     * @return star's name in Flamsteed designation.
+     */
+    public String getFlamsteedFullName() {
+        if(name.isBlank()) return "";
+        String number = name.substring(0, 3).strip();
+        if(number.isBlank()) return "";
+        String constellationAbbr = name.substring(7, 10);
+        Constellation constellation = Constellation.fromAbbr(constellationAbbr);
+        return number + " " + (constellation == null ? constellationAbbr : constellation.getGenitive());
     }
 
     /**
@@ -70,4 +104,8 @@ public class BSC5Star extends Star {
         return star;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Name:      %s\nVis. Mag.: %.2f\nCoords:    %s", getBayerName().isBlank() ? getFlamsteedFullName() : getBayerFullName(), visualMagnitude, coords);
+    }
 }

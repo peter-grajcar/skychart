@@ -58,6 +58,6 @@ public class EquatorialCoords {
 
     @Override
     public String toString() {
-        return String.format("RA: %.4fh, DEC: %.4fdeg", rightAscension, declination);
+        return String.format("RA%+.4fh DEC%+.4f\u00B0", rightAscension, declination);
     }
 }
