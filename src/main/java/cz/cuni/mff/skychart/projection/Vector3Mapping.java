@@ -7,5 +7,11 @@ package cz.cuni.mff.skychart.projection;
  */
 @FunctionalInterface
 public interface Vector3Mapping<T> {
+   /**
+    * Maps the object to a three-dimensional vector.
+    *
+    * @param obj the object to map.
+    * @return a three-dimensional vector.
+    */
    Vector3 map(T obj);
 }

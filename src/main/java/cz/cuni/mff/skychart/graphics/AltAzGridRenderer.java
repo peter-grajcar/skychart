@@ -48,6 +48,60 @@ public class AltAzGridRenderer extends Renderer {
     }
 
     /**
+     * Returns the projections plane.
+     *
+     * @return the projections plane.
+     */
+    public ProjectionPlane getProjectionPlane() {
+        return projectionPlane;
+    }
+
+    /**
+     * Sets a new projection plane.
+     *
+     * @param projectionPlane a new projection plane.
+     */
+    public void setProjectionPlane(ProjectionPlane projectionPlane) {
+        this.projectionPlane = projectionPlane;
+    }
+
+    /**
+     * Returns the angle between the altitude grid lines.
+     *
+     * @return the angle between the altitude grid lines.
+     */
+    public double getAltitudeStep() {
+        return altitudeStep;
+    }
+
+    /**
+     * Sets a new angle between the altitude grid lines.
+     *
+     * @param altitudeStep a new angle between the altitude grid lines.
+     */
+    public void setAltitudeStep(double altitudeStep) {
+        this.altitudeStep = altitudeStep;
+    }
+
+    /**
+     * Returns the angle between the azimuth grid lines.
+     *
+     * @return the angle between the azimuth grid lines.
+     */
+    public double getAzimuthStep() {
+        return azimuthStep;
+    }
+
+    /**
+     * Sets a new angle between the azimuth grid lines.
+     *
+     * @param azimuthStep a new angle between the azimuth grid lines.
+     */
+    public void setAzimuthStep(double azimuthStep) {
+        this.azimuthStep = azimuthStep;
+    }
+
+    /**
      * Renders the altitude-azimuth grid.
      */
     @Override

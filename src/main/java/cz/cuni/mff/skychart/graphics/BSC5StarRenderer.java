@@ -4,6 +4,7 @@ import cz.cuni.mff.skychart.catalogue.Star;
 import cz.cuni.mff.skychart.catalogue.bsc5.BSC5Star;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * An interface for rendering stars from BSC5 catalogue.
@@ -12,7 +13,6 @@ import javafx.scene.paint.Color;
  */
 public class BSC5StarRenderer extends StarRenderer {
 
-    private GraphicsContext context;
     private double magnitudeThreshold;
 
     /**
@@ -35,6 +35,24 @@ public class BSC5StarRenderer extends StarRenderer {
     public BSC5StarRenderer(GraphicsContext context, double threshold) {
        super(context);
        this.magnitudeThreshold = threshold;
+    }
+
+    /**
+     * Returns the visual magnitude threshold.
+     *
+     * @return current visual magnitude threshold.
+     */
+    public double getMagnitudeThreshold() {
+        return magnitudeThreshold;
+    }
+
+    /**
+     * Sets a new visual magnitude threshold.
+     *
+     * @param magnitudeThreshold a visual magnitude threshold for displaying names.
+     */
+    public void setMagnitudeThreshold(double magnitudeThreshold) {
+        this.magnitudeThreshold = magnitudeThreshold;
     }
 
     /**
@@ -64,6 +82,7 @@ public class BSC5StarRenderer extends StarRenderer {
         context.fillOval(x - size / 2, y - size / 2, size, size);
 
         if(star.getVisualMagnitude() < 2.0) {
+            context.setFont(Font.font(8));
             context.fillText(star.getBayerName(), x + 4, y + 4);
         }
     }

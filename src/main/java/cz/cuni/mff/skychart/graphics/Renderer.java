@@ -15,6 +15,24 @@ public abstract class Renderer {
         this.context = context;
     }
 
+    /**
+     * Returns the graphical context.
+     *
+     * @return the graphical context.
+     */
+    public GraphicsContext getContext() {
+        return context;
+    }
+
+    /**
+     * Sets a new graphical context
+     *
+     * @param context a new graphical context.
+     */
+    public void setContext(GraphicsContext context) {
+        this.context = context;
+    }
+
     public abstract void render();
 
 }
