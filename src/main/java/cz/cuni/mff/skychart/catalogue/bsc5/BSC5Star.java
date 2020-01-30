@@ -4,7 +4,6 @@ import cz.cuni.mff.skychart.astronomy.Constellation;
 import cz.cuni.mff.skychart.astronomy.EquatorialCoords;
 import cz.cuni.mff.skychart.astronomy.GreekLetter;
 import cz.cuni.mff.skychart.catalogue.Star;
-import static cz.cuni.mff.skychart.catalogue.bsc5.BSC5Catalogue.BSC5Field;
 
 /**
  * An object representing star in BSC5 catalogue.
@@ -12,6 +11,33 @@ import static cz.cuni.mff.skychart.catalogue.bsc5.BSC5Catalogue.BSC5Field;
  * @author Peter Grajcar
  */
 public class BSC5Star extends Star {
+
+    private String entry;
+
+    /**
+     * Returns the original entry from the BSC5 catalogue.
+     *
+     * @return the original entry from the catalogue.
+     */
+    public String getEntry() {
+        return entry;
+    }
+
+    public String getString(BSC5Field field) {
+        try {
+            return field.asString(this.entry);
+        } catch (BSC5FormatException e) {
+            return null;
+        }
+    }
+
+    public double getDouble(BSC5Field field) throws NumberFormatException {
+        try {
+            return field.asDouble(this.entry);
+        } catch (BSC5FormatException e) {
+            return Double.NaN;
+        }
+    }
 
     /**
      * Returns star's name as combination of a greek or latin letter and constellation name (Bayer designation).
@@ -98,6 +124,7 @@ public class BSC5Star extends Star {
         double dec = dec_sign * (dec_d + dec_m / 60d + dec_s / 3600d);
 
         BSC5Star star = new BSC5Star();
+        star.entry = entry;
         star.setName(name);
         star.setVisualMagnitude(visMag);
         star.setCoords(new EquatorialCoords(ra, dec));
