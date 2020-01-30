@@ -63,4 +63,18 @@ public interface ProjectionPlane {
      */
     default <T> boolean isFront(T obj, Vector3Mapping<T> mapping) { return isFront(mapping.map(obj), 0); }
 
+    /**
+     * Returns rotation as yaw, pitch, roll vector.
+     *
+     * @return a vector with angles about each axis.
+     */
+    Vector3 getRotation();
+
+    /**
+     * Returns an unit vector with direction of view.
+     *
+     * @return an unit vector with direction of view.
+     */
+    Vector3 getForward();
+
 }

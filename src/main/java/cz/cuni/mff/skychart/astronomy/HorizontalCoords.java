@@ -42,6 +42,14 @@ public class HorizontalCoords {
         return azimuth * Math.PI / 180d;
     }
 
+    public void setAltitudeRadians(double altitude) {
+        this.altitude = altitude * 180d / Math.PI;
+    }
+
+    public void setAzimuthRadians(double azimuth) {
+        this.azimuth = azimuth * 180d / Math.PI;
+    }
+
     @Override
     public String toString() {
         return String.format("ALT: %.4fdeg, AZ: %.4fdeg", altitude, azimuth);

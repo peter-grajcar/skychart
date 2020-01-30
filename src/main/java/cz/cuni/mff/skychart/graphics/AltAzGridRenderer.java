@@ -116,11 +116,13 @@ public class AltAzGridRenderer extends Renderer {
         );
 
         context.setStroke(Color.rgb(128, 0, 0));
+        context.setLineWidth(1);
         for(int j = 0; j < 90; j += 10) {
             context.beginPath();
             for (int i = 0; i < 360; ++i) {
                 HorizontalCoords coords = new HorizontalCoords(j, i);
-                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6)) continue;
+                if (!projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6))
+                    continue;
 
                 Vector2 point = projectionPlane.project(coords, horizontalCoordsMapping);
                 Vector2 screenPoint = planeCoordsMapping.map(point);
@@ -138,7 +140,8 @@ public class AltAzGridRenderer extends Renderer {
             context.beginPath();
             for (int i = 0; i <= 90; ++i) {
                 HorizontalCoords coords = new HorizontalCoords(i, j);
-                if (coords.getAltitude() < 0 || !projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6)) continue;
+                if (!projectionPlane.isFront(coords, horizontalCoordsMapping, 1e-6))
+                    continue;
 
                 Vector2 point = projectionPlane.project(coords, horizontalCoordsMapping);
                 Vector2 screenPoint = planeCoordsMapping.map(point);

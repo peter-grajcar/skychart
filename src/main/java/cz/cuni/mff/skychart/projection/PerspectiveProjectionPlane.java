@@ -92,6 +92,15 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
     }
 
     /**
+     * Returns the distance of the point of view to the picture plane.
+     *
+     * @return the distance to the picture plane.
+     */
+    public double getDistance() {
+        return direction.norm();
+    }
+
+    /**
      * Calculates and returns the projected coordinates of given vector on the plane.
      *
      * <a href="http://geomalgorithms.com/a06-_intersect-2.html">link</a>
@@ -165,10 +174,21 @@ public class PerspectiveProjectionPlane implements ProjectionPlane {
      *
      * @return an unit vector perpendicular to the direction vector and upward vector.
      */
-    private Vector3 getSide() {
+    public Vector3 getSide() {
         Vector3 dir = direction.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         Vector3 upRot = up.rotate(Vector3.Axis.Z, rotationZ).rotate(Vector3.Axis.Y, rotationY);
         return dir.cross(upRot).normalise();
     }
 
+    /**
+     * Returns a normalised vector with direction of view.
+     *
+     * @return an unit vector with direction of view.
+     */
+    @Override
+    public Vector3 getForward() {
+        return direction.normalise()
+                .rotate(Vector3.Axis.Z, rotationZ)
+                .rotate(Vector3.Axis.Y, rotationY);
+    }
 }

@@ -69,22 +69,23 @@ public class App extends Application {
           canvas.requestFocus();
         });
 
-        //drawStars(canvas);
-        //drawCube(canvas);
         drawStarProjection(canvas, scene);
 
         stage.setScene(scene);
         stage.show();
     }
 
+    private ZonedDateTime time;
+    private Location location;
+    private Star selectedStar;
 
     private void drawStarProjection(Canvas canvas, Scene scene) throws BSC5FormatException, IOException {
         GraphicsContext context = canvas.getGraphicsContext2D();
 
         Catalogue catalogue = new BSC5Catalogue();
         List<Star> stars = catalogue.starList();
-        ZonedDateTime time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC);
-        Location location = new Location(48.2, 17.4);
+        time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC);
+        location = new Location(48.2, 17.4);
 
         PerspectiveProjectionPlane plane = new PerspectiveProjectionPlane(
                 new Vector3(),
@@ -182,6 +183,20 @@ public class App extends Application {
             }
         });
 
+        Vector3Mapping<HorizontalCoords> horizontalCoordsMapping = coords -> new Vector3(
+                -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.cos(coords.getAzimuthRadians()),
+                -10 * Math.cos(Math.PI/2 - coords.getAltitudeRadians()),
+                -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.sin(coords.getAzimuthRadians())
+        );
+        Vector2Mapping<Vector2> planeToScreenMapping = point -> new Vector2(
+                canvas.getWidth()/2 + 400 * point.getX(),
+                canvas.getHeight()/2 + 400 * point.getY()
+        );
+        Vector2Mapping<Vector2> screenToPlaneMapping = point -> new Vector2(
+                (point.getX() - canvas.getWidth()/2) / 400,
+                (point.getY() - canvas.getHeight()/2) / 400
+        );
+
         new AnimationTimer() {
             private long prevTime = -1;
             private long elapsedTime;
@@ -190,18 +205,7 @@ public class App extends Application {
                 long dt = prevTime == -1 ? 0 : System.nanoTime() - prevTime;
                 prevTime = System.nanoTime();
                 if(!paused.get())
-                    elapsedTime += dt;
-                ZonedDateTime zonedDateTime = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC).plusSeconds(elapsedTime / 10_000_000);
-
-                Vector3Mapping<HorizontalCoords> horizontalCoordsMapping = coords -> new Vector3(
-                            -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.cos(coords.getAzimuthRadians()),
-                            -10 * Math.cos(Math.PI/2 - coords.getAltitudeRadians()),
-                            -10 * Math.sin(Math.PI/2 - coords.getAltitudeRadians()) * Math.sin(coords.getAzimuthRadians())
-                    );
-                Vector2Mapping<Vector2> planeCoordsMapping = point -> new Vector2(
-                    canvas.getWidth()/2 + 400 * point.getX(),
-                    canvas.getHeight()/2 + 400 * point.getY()
-                );
+                    time = time.plusSeconds(dt / 10_000_000);
 
                 plane.setRotation(rotationY.doubleValue(), rotationZ.doubleValue());
                 plane.setDistance(dist.doubleValue());
@@ -215,103 +219,70 @@ public class App extends Application {
 
                 // Draw the stars
                 for (Star star : stars) {
-                    HorizontalCoords coords = star.getCoords().toHorizontal(zonedDateTime, location);
+                    HorizontalCoords coords = star.getCoords().toHorizontal(time, location);
 
                     if(coords.getAltitude() < 0 || !plane.isFront(coords, horizontalCoordsMapping, 1e-6))
                         continue;
 
                     Vector2 point = plane.project(coords, horizontalCoordsMapping);
 
-                    starRenderer.render(planeCoordsMapping.map(point), star);
+                    starRenderer.render(planeToScreenMapping.map(point), star);
+                    if(star.equals(selectedStar)) {
+                        Vector2 screenPoint = planeToScreenMapping.map(point);
+                        context.setStroke(Color.rgb(128, 0, 0));
+                        context.setLineWidth(2);
+                        context.strokeOval(screenPoint.getX() - 6, screenPoint.getY() - 6, 12, 12);
+                    }
                 }
 
                 // Time and location
                 context.setFont(Font.font("Courier New", 12));
-                context.fillText(zonedDateTime.toString(), 10, canvas.getHeight() - 30);
+                context.fillText(time.toString(), 10, canvas.getHeight() - 30);
                 context.fillText(location.toString(), 10, canvas.getHeight() - 15);
             }
         }.start();
 
-    }
+        for (Star star : stars) {
+            BSC5Star bsc5Star = (BSC5Star) star;
+            if(bsc5Star.getBayerName().equals("Alp CMa")) {
+                logger.debug(star.getCoords().toHorizontal(time, location));
+            }
+        }
 
-    private void drawCube(Canvas canvas) {
-        PerspectiveProjectionPlane plane = new PerspectiveProjectionPlane(
-                new Vector3(),
-                new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0)
-        );
-        Vector3[] vertices = {
-                new Vector3(5, 1, -1), new Vector3(5, 1, 1),
-                new Vector3(6, 1, 1), new Vector3(6, 1, -1),
-                new Vector3(5, -1, -1), new Vector3(5, -1, 1),
-                new Vector3(6, -1, 1), new Vector3(6, -1, -1),
-        };
+        canvas.setOnMouseClicked(mouseEvent -> {
+            Vector2 point = new Vector2(mouseEvent.getX(), mouseEvent.getY());
+            Vector2 pointOnPlane = screenToPlaneMapping.map(point);
+            HorizontalCoords coords = pointOnPlaneToHorizontalCoords(pointOnPlane, plane);
 
-        GraphicsContext context = canvas.getGraphicsContext2D();
-
-        new AnimationTimer() {
-            private long prevNanoTime = -1;
-            @Override
-            public void handle(long l) {
-                long dt = 0;
-                if(prevNanoTime != -1)
-                    dt = System.nanoTime() - prevNanoTime;
-                prevNanoTime = System.nanoTime();
-
-                context.setFill(Color.WHITE);
-                context.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
-
-                context.setFill(Color.BLACK);
-                for (Vector3 vertex : vertices) {
-                    Vector2 p = plane.project(vertex);
-                    double x = canvas.getWidth() / 2 + p.getX() * 400;
-                    double y = canvas.getHeight() / 2 + p.getY() * 400;
-                    context.fillOval(x - 3, y - 3, 6, 6);
+            Star closest = null;
+            double closestDistance = 0;
+            for (Star star : stars) {
+                HorizontalCoords starCoords = star.getCoords().toHorizontal(time, location);
+                double dAlt = coords.getAltitude() - starCoords.getAltitude();
+                double dAz = coords.getAzimuth() - starCoords.getAzimuth();
+                double distance = dAlt * dAlt + dAz * dAz;
+                if(closest == null || distance < closestDistance) {
+                    closest = star;
+                    closestDistance = distance;
                 }
 
-                plane.rotate(Vector3.Axis.Y, dt / 10_000_000_000d);
             }
-        }.start();
+            logger.debug( closest);
+            selectedStar = closest;
+        });
+
     }
 
-    private void drawStars(Canvas canvas) throws BSC5FormatException, IOException {
-        Catalogue catalogue = new BSC5Catalogue();
-        List<Star> stars = catalogue.starList();
+    private HorizontalCoords pointOnPlaneToHorizontalCoords(Vector2 point, PerspectiveProjectionPlane plane) {
+        Vector3 planeRotation = plane.getRotation();
+        double angleZ = Math.atan(point.getY() / plane.getDistance());
+        double angleY = Math.atan(point.getX() / plane.getDistance());
 
-        GraphicsContext context = canvas.getGraphicsContext2D();
+        HorizontalCoords horizontalCoords =  new HorizontalCoords();
+        horizontalCoords.setAltitudeRadians(-planeRotation.getZ() - angleZ);
+        horizontalCoords.setAzimuthRadians(Math.PI-planeRotation.getY() + angleY);
 
-        final long startNanoTime = System.nanoTime();
-
-        new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                context.setFill(Color.rgb(0,0,32));
-                context.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
-
-                long t = System.nanoTime() - startNanoTime;
-                ZonedDateTime time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC).plusSeconds(t/1_000_000);
-
-                for (Star star : stars) {
-                    BSC5Star bsc5Star = (BSC5Star) star;
-                    HorizontalCoords horizontalCoords = star.getCoords().toHorizontal(
-                            time,
-                            new Location(48.2, 17.4)
-                    );
-
-                    if (horizontalCoords.getAltitude() < 0) continue;
-
-                    double r = (90 - horizontalCoords.getAltitude()) / 90 * 400;
-                    double x = 400 + r * Math.cos(horizontalCoords.getAzimuthRadians());
-                    double y = 400 + r * Math.sin(horizontalCoords.getAzimuthRadians());
-                    double size = 0.5 + 4 * Math.sqrt(Math.pow(2.512, -star.getVisualMagnitude()));
-
-                    context.setFill(Color.WHITE);
-                    context.fillOval(x - size / 2, y - size / 2, size, size);
-                    if(star.getVisualMagnitude() < 2.0)
-                        context.fillText(bsc5Star.getBayerName(), x, y);
-                }
-            }
-        }.start();
+        return horizontalCoords;
     }
 
 }

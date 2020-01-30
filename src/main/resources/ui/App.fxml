@@ -17,8 +17,8 @@
               alignment="bottom_left"
               GridPane.columnIndex="0"
               GridPane.rowIndex="1">
-            <Button text="test"/>
-            <Button text="test"/>
+            <!--<Button text="test"/>
+            <Button text="test"/>-->
         </HBox>
     </children>
     <columnConstraints>
