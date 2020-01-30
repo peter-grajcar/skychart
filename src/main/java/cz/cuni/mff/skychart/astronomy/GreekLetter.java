@@ -1,7 +1,7 @@
 package cz.cuni.mff.skychart.astronomy;
 
 /**
- * created: 30/01/2020
+ * A set of greek letters.
  *
  * @author Peter Grajcar
  */
@@ -42,18 +42,39 @@ public enum GreekLetter {
         this.symbol = symbol;
     }
 
+    /**
+     * Returns an abbreviated form of the letter's name.
+     *
+     * @return an abbreviated letter name.
+     */
     public String getAbbr() {
         return abbr;
     }
 
+    /**
+     * Returns a full english letter's name.
+     *
+     * @return a full letter name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns a Unicode symbol for the letter.
+     *
+     * @return a Unicode symbol for the letter.
+     */
     public char getSymbol() {
         return symbol;
     }
 
+    /**
+     * Returns a greek letter matching the abbreviation.
+     *
+     * @param abbr an abbrviation of the letter's name.
+     * @return
+     */
     public static GreekLetter fromAbbr(String abbr) {
         for(GreekLetter letter : GreekLetter.values()) {
             if(letter.abbr.equals(abbr))
