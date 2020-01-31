@@ -36,12 +36,12 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
             <columns>
-                <TableColumn text="Field" sortable="false">
+                <TableColumn text="%selectedStarTable.field" sortable="false">
                     <cellValueFactory>
                         <PropertyValueFactory property="field" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Value" sortable="false">
+                <TableColumn text="%selectedStarTable.value" sortable="false">
                     <cellValueFactory>
                         <PropertyValueFactory property="value" />
                     </cellValueFactory>

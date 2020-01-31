@@ -31,6 +31,6 @@ However, the code is extensible and more catalogues can be added.
 
 ## Documentation
 
-Link to the [documentation](http://www.ms.mff.cuni.cz/~grajcarp/)
+Link to the [documentation](http://www.ms.mff.cuni.cz/~grajcarp/skychart/apidocs/)
 
 &copy; Peter Grajcar 2020

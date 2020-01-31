@@ -30,6 +30,7 @@ public class BSC5Star extends Star {
     /**
      * Returns the field from the entry from the BSC5 catalogue as {@code String}.
      *
+     * @param field a field to get.
      * @return the field from the catalogue as {@code String}.
      */
     public String getString(BSC5Field field) {
@@ -43,6 +44,7 @@ public class BSC5Star extends Star {
     /**
      * Returns the field from the entry from the BSC5 catalogue as {@code double}.
      *
+     * @param field a field to get.
      * @return the field from the catalogue as {@code double}.
      * @throws NumberFormatException if unable to interpret the field as number.
      */
