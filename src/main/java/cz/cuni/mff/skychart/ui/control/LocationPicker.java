@@ -2,6 +2,8 @@ package cz.cuni.mff.skychart.ui.control;
 
 import cz.cuni.mff.skychart.astronomy.Location;
 import cz.cuni.mff.skychart.settings.Localisation;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
@@ -24,7 +26,7 @@ public class LocationPicker extends GridPane {
     @FXML
     private TextField longitude;
 
-    private Location location;
+    private ObjectProperty<Location> location = new SimpleObjectProperty<>();
 
     public LocationPicker() throws IOException {
         ResourceBundle localisation = Localisation.getBundle();
@@ -35,11 +37,14 @@ public class LocationPicker extends GridPane {
 
         latitude.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         longitude.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+
+        location.addListener((observableValue, oldLocation, newLocation) -> {
+            latitude.setText(Double.toString(newLocation.getLatitude()));
+            longitude.setText(Double.toString(newLocation.getLongitude()));
+        });
     }
 
     public void setLocation(Location location) {
-        this.location = location;
-        latitude.setText(Double.toString(location.getLatitude()));
-        longitude.setText(Double.toString(location.getLongitude()));
+        this.location.set(location);
     }
 }

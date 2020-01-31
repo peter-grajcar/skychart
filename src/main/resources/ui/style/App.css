@@ -62,3 +62,7 @@
 .table-row-cell:empty {
     -fx-background-color: transparent;
 }
+
+.text-field {
+    -fx-font-family: "Courier New";
+}

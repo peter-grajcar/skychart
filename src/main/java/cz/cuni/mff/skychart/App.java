@@ -230,6 +230,8 @@ public class App extends Application {
                 if(!paused.get())
                     time = time.plusSeconds(dt / 10_000_000);
 
+                dateTimePicker.setDateTimeValue(time.toLocalDateTime());
+
                 plane.setRotation(rotationY.doubleValue(), rotationZ.doubleValue());
                 plane.setDistance(dist.doubleValue());
 

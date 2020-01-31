@@ -14,10 +14,11 @@
 
     <DatePicker fx:id="datePicker"
                 GridPane.columnIndex="1"
-                GridPane.rowIndex="0"/>
+                GridPane.rowIndex="0"
+                prefWidth="250"/>
     </children>
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
-        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0"  />
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="30.0" />
+        <ColumnConstraints hgrow="ALWAYS" percentWidth="70.0"  />
     </columnConstraints>
 </fx:root>

@@ -10,6 +10,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -29,6 +31,8 @@ public class DateTimePicker extends GridPane {
     private DatePicker datePicker;
 
     public static final String DEFAULT_FORMAT = "dd.MM.yyyy HH:mm:ss";
+
+    private final static Logger logger = LogManager.getLogger(DateTimePicker.class);
 
     private DateTimeFormatter formatter;
     private ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(LocalDateTime.now());
@@ -67,6 +71,7 @@ public class DateTimePicker extends GridPane {
         // Syncronize changes to dateTimeValue back to the underlying date value
         dateTimeValue.addListener((observable, oldValue, newValue) -> {
             datePicker.setValue(newValue == null ? null : newValue.toLocalDate());
+            datePicker.getEditor().setText(getDateTimeValue().format(formatter));
         });
 
         // Persist changes onblur
@@ -86,10 +91,7 @@ public class DateTimePicker extends GridPane {
     }
 
     public void setDateTimeValue(LocalDateTime dateTimeValue) {
-        if(dateTimeValue.isAfter(LocalDateTime.of(1971, 6, 30, 12, 00)))
-            this.dateTimeValue.set(dateTimeValue);
-        else
-            this.dateTimeValue.set(null);
+        this.dateTimeValue.set(dateTimeValue);
     }
 
     public ObjectProperty<LocalDateTime> dateTimeValueProperty() {
@@ -110,7 +112,6 @@ public class DateTimePicker extends GridPane {
 
     class InternalConverter extends StringConverter<LocalDate> {
         public String toString(LocalDate object) {
-
             LocalDateTime value = getDateTimeValue();
             return (value != null) ? value.format(formatter) : "";
         }
