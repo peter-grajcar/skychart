@@ -11,7 +11,7 @@ SkyChart is an application which visualises the night sky.
 - Use arrows to look around the skies. 
 - Use keys `M` and `N` to zoom in and out.
 - Use left mouse button to select the star, and learn more about it. 
-- USe space to pause or 
+- Use space to pause or resume time.
 
 ### Time and Location
 
