@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Field-value pair
+ * Field-value pair used in catalogue star information table.
  *
  * @author Peter Grajcar
  */

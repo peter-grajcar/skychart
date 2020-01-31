@@ -2,8 +2,8 @@ package cz.cuni.mff.skychart.catalogue;
 
 import cz.cuni.mff.skychart.astronomy.EquatorialCoords;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * An object representing a star.
@@ -81,7 +81,7 @@ public class Star {
      * @return all available information about the star.
      */
     public Map<String, String> getInfo() {
-        Map<String, String> fieldValues = new HashMap<>();
+        Map<String, String> fieldValues = new TreeMap<>();
         fieldValues.put("Name", name);
         fieldValues.put("Visual Magnitude", Double.toString(visualMagnitude));
         fieldValues.put("Equatorial Coordinates", coords.toString());

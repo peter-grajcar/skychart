@@ -5,8 +5,8 @@ import cz.cuni.mff.skychart.astronomy.EquatorialCoords;
 import cz.cuni.mff.skychart.astronomy.GreekLetter;
 import cz.cuni.mff.skychart.catalogue.Star;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * An object representing star in BSC5 catalogue.
@@ -153,7 +153,7 @@ public class BSC5Star extends Star {
 
     @Override
     public Map<String, String> getInfo() {
-        Map<String, String> fieldValues = new HashMap<>();
+        Map<String, String> fieldValues = new TreeMap<>();
         for(BSC5Field field : BSC5Field.values()) {
             fieldValues.put(field.name(), this.getString(field).strip());
         }

@@ -10,7 +10,7 @@ import cz.cuni.mff.skychart.graphics.AltAzGridRenderer;
 import cz.cuni.mff.skychart.graphics.bsc5.BSC5StarRenderer;
 import cz.cuni.mff.skychart.projection.*;
 import cz.cuni.mff.skychart.settings.Localisation;
-import cz.cuni.mff.skychart.ui.StarInfo;
+import cz.cuni.mff.skychart.ui.StarItems;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -261,6 +261,11 @@ public class App extends Application {
 
         // Select star
         canvas.setOnMouseClicked(mouseEvent -> {
+            if(!canvas.isFocused()) {
+                canvas.requestFocus();
+                return;
+            }
+
             Vector2 point = new Vector2(mouseEvent.getX(), mouseEvent.getY());
 
             Star closest = null;
@@ -277,7 +282,7 @@ public class App extends Application {
             }
             selectedStar = closest;
 
-            starTable.setItems(StarInfo.getInfo(selectedStar));
+            starTable.setItems(StarItems.getItems(selectedStar));
         });
 
     }

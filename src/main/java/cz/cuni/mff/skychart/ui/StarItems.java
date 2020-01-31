@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * created: 31/01/2020
+ * Contains methods for conversion of the star info to {@link ObservableList ObservableList} used by
+ * {@link javafx.scene.control.TableView TableView}.
  *
  * @author Peter Grajcar
  */
-public class StarInfo {
+public class StarItems {
 
     /**
      * Retrieves information about the star and converts it to {@link ObservableList ObservableList} of {@link FieldValue FieldValue}s so it can be used
@@ -22,7 +23,7 @@ public class StarInfo {
      * @param star selected star.
      * @return information about the star.
      */
-    public static ObservableList<FieldValue> getInfo(Star star) {
+    public static ObservableList<FieldValue> getItems(Star star) {
         Map<String, String> info = star.getInfo();
         List<FieldValue> fieldValues = new ArrayList<>();
         for(String key : info.keySet())
