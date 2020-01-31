@@ -10,6 +10,7 @@ import cz.cuni.mff.skychart.graphics.AltAzGridRenderer;
 import cz.cuni.mff.skychart.graphics.bsc5.BSC5StarRenderer;
 import cz.cuni.mff.skychart.projection.*;
 import cz.cuni.mff.skychart.settings.Localisation;
+import cz.cuni.mff.skychart.ui.StarInfo;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -19,11 +20,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -51,6 +55,10 @@ public class App extends Application {
         launch(args);
     }
 
+    @FXML
+    private Canvas canvas;
+    private TableView starTable;
+
     @Override
     public void start(Stage stage) throws Exception {
         ResourceBundle localisation = Localisation.getBundle();
@@ -61,14 +69,17 @@ public class App extends Application {
 
         Scene scene = new Scene(root);
 
-        Canvas canvas = (Canvas) root.lookup("#canvas");
-        canvas.widthProperty().bind(root.widthProperty());
-        canvas.heightProperty().bind(root.heightProperty());
+        canvas = (Canvas) root.lookup("#canvas");
+        HBox canvasBox = (HBox) root.lookup("#canvas_box");
+        starTable = (TableView) root.lookup("#selected_star_table");
+
+        canvas.widthProperty().bind(canvasBox.widthProperty());
+        canvas.heightProperty().bind(canvasBox.heightProperty());
         canvas.setOnMouseClicked(mouseEvent -> {
           canvas.requestFocus();
         });
 
-        drawStarProjection(canvas, scene);
+        drawStarProjection(scene);
 
         stage.setScene(scene);
         stage.show();
@@ -78,7 +89,7 @@ public class App extends Application {
     private Location location;
     private Star selectedStar;
 
-    private void drawStarProjection(Canvas canvas, Scene scene) throws BSC5FormatException, IOException {
+    private void drawStarProjection(Scene scene) throws BSC5FormatException, IOException {
         GraphicsContext context = canvas.getGraphicsContext2D();
 
         Catalogue catalogue = new BSC5Catalogue();
@@ -265,6 +276,8 @@ public class App extends Application {
 
             }
             selectedStar = closest;
+
+            starTable.setItems(StarInfo.getInfo(selectedStar));
         });
 
     }
