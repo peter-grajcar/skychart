@@ -12,6 +12,7 @@
 <?import cz.cuni.mff.skychart.ui.control.DateTimePicker?>
 <?import cz.cuni.mff.skychart.ui.control.LocationPicker?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
 <GridPane fx:controller="cz.cuni.mff.skychart.App"
           xmlns:fx="http://javafx.com/fxml" alignment="center" prefWidth="960" prefHeight="720">
     <stylesheets>
@@ -51,8 +52,9 @@
         <VBox GridPane.columnIndex="0"
               GridPane.rowIndex="1"
               spacing="10">
-            <DateTimePicker fx:id="dateTimePicker"/>
-            <LocationPicker />
+            <padding><Insets top="10" left="10" /></padding>
+            <DateTimePicker fx:id="dateTimePicker" maxWidth="300" />
+            <LocationPicker fx:id="locationPicker" maxWidth="300" />
         </VBox>
     </children>
 

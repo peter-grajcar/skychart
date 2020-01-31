@@ -61,7 +61,7 @@ public class BSC5Star extends Star {
      */
     public String getBayerName() {
         if(name.isBlank()) return "";
-        String letterAbbr = name.substring(3, 7).strip();
+        String letterAbbr = name.substring(3, 6).strip();
         if(letterAbbr.isBlank()) return "";
         GreekLetter letter = GreekLetter.fromAbbr(letterAbbr);
         String constellation = name.substring(7, 10);
@@ -75,7 +75,7 @@ public class BSC5Star extends Star {
      */
     public String getBayerFullName() {
         if(name.isBlank()) return "";
-        String letterAbbr = name.substring(3, 7).strip();
+        String letterAbbr = name.substring(3, 6).strip();
         if(letterAbbr.isBlank()) return "";
         GreekLetter letter = GreekLetter.fromAbbr(letterAbbr);
         String constellationAbbr = name.substring(7, 10);
