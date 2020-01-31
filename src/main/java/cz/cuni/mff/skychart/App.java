@@ -11,6 +11,7 @@ import cz.cuni.mff.skychart.graphics.bsc5.BSC5StarRenderer;
 import cz.cuni.mff.skychart.projection.*;
 import cz.cuni.mff.skychart.settings.Localisation;
 import cz.cuni.mff.skychart.ui.StarItems;
+import cz.cuni.mff.skychart.ui.control.DateTimePicker;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -36,8 +37,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -57,21 +56,36 @@ public class App extends Application {
 
     @FXML
     private Canvas canvas;
-    private TableView starTable;
+    @FXML
+    private HBox canvasBox;
+    @FXML
+    private TableView selectedStarTable;
+    @FXML
+    private DateTimePicker dateTimePicker;
+
+    private ZonedDateTime time;
+    private Location location;
+    private Star selectedStar;
 
     @Override
     public void start(Stage stage) throws Exception {
         ResourceBundle localisation = Localisation.getBundle();
 
         stage.setTitle(localisation.getString("window.title"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/App.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/App.fxml"), localisation);
         GridPane root = loader.load();
 
         Scene scene = new Scene(root);
 
+        time = ZonedDateTime.now();
+        location = new Location(48.2, 17.4);
+
         canvas = (Canvas) root.lookup("#canvas");
-        HBox canvasBox = (HBox) root.lookup("#canvas_box");
-        starTable = (TableView) root.lookup("#selected_star_table");
+        canvasBox = (HBox) root.lookup("#canvasBox");
+        selectedStarTable = (TableView) root.lookup("#selectedStarTable");
+        dateTimePicker = (DateTimePicker) root.lookup("#dateTimePicker");
+
+        dateTimePicker.setDateTimeValue(time.toLocalDateTime());
 
         canvas.widthProperty().bind(canvasBox.widthProperty());
         canvas.heightProperty().bind(canvasBox.heightProperty());
@@ -85,17 +99,11 @@ public class App extends Application {
         stage.show();
     }
 
-    private ZonedDateTime time;
-    private Location location;
-    private Star selectedStar;
-
     private void drawStarProjection(Scene scene) throws BSC5FormatException, IOException {
         GraphicsContext context = canvas.getGraphicsContext2D();
 
         Catalogue catalogue = new BSC5Catalogue();
         List<Star> stars = catalogue.starList();
-        time = LocalDateTime.parse("2020-01-27T22:00:00").atZone(ZoneOffset.UTC);
-        location = new Location(48.2, 17.4);
 
         PerspectiveProjectionPlane plane = new PerspectiveProjectionPlane(
                 new Vector3(),
@@ -246,8 +254,8 @@ public class App extends Application {
 
                 // Time and location
                 context.setFont(Font.font("Courier New", 12));
-                context.fillText(time.toString(), 10, canvas.getHeight() - 30);
-                context.fillText(location.toString(), 10, canvas.getHeight() - 15);
+                context.fillText(time.toString(), 10, canvas.getHeight() - 15);
+                context.fillText(location.toString(), 10, canvas.getHeight() - 30);
 
                 // Selected star info
                 if(selectedStar != null) {
@@ -282,7 +290,7 @@ public class App extends Application {
             }
             selectedStar = closest;
 
-            starTable.setItems(StarItems.getItems(selectedStar));
+            selectedStarTable.setItems(StarItems.getItems(selectedStar));
         });
 
     }
