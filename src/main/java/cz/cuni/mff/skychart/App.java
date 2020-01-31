@@ -90,8 +90,11 @@ public class App extends Application {
         locationPicker = (LocationPicker) root.lookup("#locationPicker");
 
         dateTimePicker.setDateTimeValue(time.toLocalDateTime());
+        dateTimePicker.setOnDateTimeChangedListener((observableValue, oldDateTime, newDateTime) -> {
+            time = newDateTime.atZone(time.getZone());
+        });
 
-        locationPicker.setLocation(location);
+        locationPicker.setValue(location);
 
         canvas.widthProperty().bind(canvasBox.widthProperty());
         canvas.heightProperty().bind(canvasBox.heightProperty());
@@ -231,6 +234,8 @@ public class App extends Application {
                     time = time.plusSeconds(dt / 10_000_000);
 
                 dateTimePicker.setDateTimeValue(time.toLocalDateTime());
+
+                location = locationPicker.getValue();
 
                 plane.setRotation(rotationY.doubleValue(), rotationZ.doubleValue());
                 plane.setDistance(dist.doubleValue());

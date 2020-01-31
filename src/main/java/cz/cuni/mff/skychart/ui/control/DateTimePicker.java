@@ -3,6 +3,7 @@ package cz.cuni.mff.skychart.ui.control;
 import cz.cuni.mff.skychart.settings.Localisation;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.DatePicker;
@@ -43,6 +44,8 @@ public class DateTimePicker extends GridPane {
         }
     };
 
+    private ChangeListener<LocalDateTime> onDateTimeChangedListener;
+
     public DateTimePicker() throws IOException {
         ResourceBundle localisation = Localisation.getBundle();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/control/DateTimePicker.fxml"), localisation);
@@ -66,12 +69,16 @@ public class DateTimePicker extends GridPane {
                     dateTimeValue.set(LocalDateTime.of(newValue, time));
                 }
             }
+            if(onDateTimeChangedListener != null)
+                onDateTimeChangedListener.changed(dateTimeValue, dateTimeValue.get(), dateTimeValue.get());
         });
 
         // Syncronize changes to dateTimeValue back to the underlying date value
         dateTimeValue.addListener((observable, oldValue, newValue) -> {
             datePicker.setValue(newValue == null ? null : newValue.toLocalDate());
             datePicker.getEditor().setText(getDateTimeValue().format(formatter));
+            if(onDateTimeChangedListener != null)
+                onDateTimeChangedListener.changed(dateTimeValue, dateTimeValue.get(), dateTimeValue.get());
         });
 
         // Persist changes onblur
@@ -80,6 +87,10 @@ public class DateTimePicker extends GridPane {
                 simulateEnterPressed();
         });
 
+    }
+
+    public void setOnDateTimeChangedListener(ChangeListener<LocalDateTime> onDateTimeChangedListener) {
+        this.onDateTimeChangedListener = onDateTimeChangedListener;
     }
 
     private void simulateEnterPressed() {
