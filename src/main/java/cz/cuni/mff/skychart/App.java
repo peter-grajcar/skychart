@@ -12,6 +12,7 @@ import cz.cuni.mff.skychart.projection.*;
 import cz.cuni.mff.skychart.settings.Localisation;
 import cz.cuni.mff.skychart.ui.StarItems;
 import cz.cuni.mff.skychart.ui.control.DateTimePicker;
+import cz.cuni.mff.skychart.ui.control.LocationPicker;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -62,6 +63,8 @@ public class App extends Application {
     private TableView selectedStarTable;
     @FXML
     private DateTimePicker dateTimePicker;
+    @FXML
+    private LocationPicker locationPicker;
 
     private ZonedDateTime time;
     private Location location;
@@ -84,8 +87,11 @@ public class App extends Application {
         canvasBox = (HBox) root.lookup("#canvasBox");
         selectedStarTable = (TableView) root.lookup("#selectedStarTable");
         dateTimePicker = (DateTimePicker) root.lookup("#dateTimePicker");
+        locationPicker = (LocationPicker) root.lookup("#locationPicker");
 
         dateTimePicker.setDateTimeValue(time.toLocalDateTime());
+
+        locationPicker.setLocation(location);
 
         canvas.widthProperty().bind(canvasBox.widthProperty());
         canvas.heightProperty().bind(canvasBox.heightProperty());
@@ -260,7 +266,7 @@ public class App extends Application {
                 // Selected star info
                 if(selectedStar != null) {
                     context.setFill(Color.rgb(0, 0, 0, 0.5));
-                    context.fillRect(5, 15, 300, 100);
+                    context.fillRect(5, 15, 300, 51);
                     context.setFill(Color.WHITE);
                     context.fillText(selectedStar.toString(), 10, 30);
                 }

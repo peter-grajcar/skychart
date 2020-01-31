@@ -12,14 +12,17 @@
     <Label text="%locationPicker.latitude"
            GridPane.columnIndex="0"
            GridPane.rowIndex="0" />
-    <TextField GridPane.columnIndex="1"
+    <TextField fx:id="latitude"
+               GridPane.columnIndex="1"
                GridPane.rowIndex="0" />
 
     <Label text="%locationPicker.longitude"
            GridPane.columnIndex="0"
-           GridPane.rowIndex="1"/>
+           GridPane.rowIndex="1" />
 
-    <TextField GridPane.columnIndex="1"
+    <TextField fx:id="longitude"
+
+               GridPane.columnIndex="1"
                GridPane.rowIndex="1" />
     </children>
     <columnConstraints>
