@@ -17,6 +17,7 @@ SkyChart is an application which visualises the night sky.
 ### Star Info
 
 After selecting the star, information about it will show up in the top-right corner.
+Raw information from the catalogue can be found at the bottom-left corner.
 
 ### Catalogue
 
