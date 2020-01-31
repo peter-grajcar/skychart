@@ -6,6 +6,7 @@
 
     <groupId>cz.cuni.mff</groupId>
     <artifactId>skychart</artifactId>
+    <name>SkyChart</name>
     <version>1.0.0-RELEASE</version>
     <description>An application that visualises the night sky.</description>
 

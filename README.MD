@@ -1,6 +1,6 @@
-# SkyChart
-
 ![Generic badge](https://img.shields.io/badge/VERSION-1.0.0-<COLOR>.svg)
+
+# SkyChart
 
 SkyChart is an application which visualises the night sky.
 
@@ -29,7 +29,9 @@ However, the code is extensible and more catalogues can be added.
 
 ## Screenshots
 
-![SkyChart Screenshot](./screenshots/screenshot-01.png)
+![SkyChart Screenshot 1](./screenshots/screenshot-01.png)
+
+![SkyChart Screenshot 2](./screenshots/screenshot-02.png)
 
 ## Documentation
 
