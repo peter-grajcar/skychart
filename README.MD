@@ -12,7 +12,8 @@ SkyChart is an application which visualises the night sky.
 
 ### Time and Location
 
-...
+Date, time and location can be set at the bottom of the window using date picker and text fields for the location.
+Latitude and longitude is measured in degrees.
 
 ### Star Info
 
@@ -23,6 +24,10 @@ Raw information from the catalogue can be found at the right side.
 
 SkyChart currently implements only one star catalogue, the [BSC5](http://tdc-www.harvard.edu/catalogs/bsc5.html). 
 However, the code is extensible and more catalogues can be added.
+
+## Screenshots
+
+![SkyChart Screenshot](./screenshots/screenshot-01.png)
 
 ## Documentation
 
