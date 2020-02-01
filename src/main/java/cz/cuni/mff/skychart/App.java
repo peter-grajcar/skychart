@@ -75,6 +75,7 @@ public class App extends Application {
         ResourceBundle localisation = Localisation.getBundle();
 
         stage.setTitle(localisation.getString("window.title"));
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/App.fxml"), localisation);
         GridPane root = loader.load();
 

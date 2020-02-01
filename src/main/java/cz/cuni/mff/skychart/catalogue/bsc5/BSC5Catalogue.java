@@ -5,9 +5,7 @@ import cz.cuni.mff.skychart.catalogue.Catalogue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,8 @@ public class BSC5Catalogue implements Catalogue {
         stars = new ArrayList<>();
 
         int entry = 1;
-        try(FileReader reader = new FileReader(getClass().getClassLoader().getResource("bsc5/bsc5.dat").getFile());
+        try(InputStream istream = getClass().getClassLoader().getResourceAsStream("bsc5/bsc5.dat");
+            InputStreamReader reader = new InputStreamReader(istream);
             BufferedReader bufferedReader = new BufferedReader(reader)) {
             String line;
             while((line = bufferedReader.readLine()) != null) {

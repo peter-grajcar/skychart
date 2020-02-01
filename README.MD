@@ -4,6 +4,13 @@
 
 SkyChart is an application which visualises the night sky.
 
+## Running the Application
+
+The application can be run using this Maven command:
+```
+mvn javafx:run
+```
+
 ## User Guide
 
 ### Navigating Across the Skies
