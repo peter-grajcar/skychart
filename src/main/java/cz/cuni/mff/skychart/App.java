@@ -199,10 +199,10 @@ public class App extends Application {
                     keyEvent.consume();
                     break;
                 case M:
-                    dist.setValue(dist.getValue() + 0.5);
+                    if(dist.getValue() < 9)
+                        dist.setValue(dist.getValue() + 0.5);
                     break;
                 case N:
-                    if(dist.getValue() < 10)
                     if(dist.getValue() > 1)
                         dist.setValue(dist.getValue() - 0.5);
                     break;

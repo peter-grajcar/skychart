@@ -64,13 +64,18 @@ public class Coordinates {
         // LST needs to be converted from seconds to radians
         double hourAngle = (lst / 3600 + location.getLongitude() / 15 - eq.getRightAscension()) * Math.PI / 12;
 
+        double lat = location.getLatitudeRadians();
+        if(90 - location.getLatitude() < 1e-8 )
+            lat -= 1e-8;
+
         double alt =  Math.asin(
-                Math.sin(eq.getDeclinationRadians()) * Math.sin(location.getLatitudeRadians())
-                        + Math.cos(eq.getDeclinationRadians()) * Math.cos(location.getLatitudeRadians()) * Math.cos(hourAngle)
+                Math.sin(eq.getDeclinationRadians()) * Math.sin(lat)
+                        + Math.cos(eq.getDeclinationRadians()) * Math.cos(lat) * Math.cos(hourAngle)
         );
+
         double az = Math.acos(
-                (Math.sin(eq.getDeclinationRadians()) - Math.sin(location.getLatitudeRadians()) * Math.sin(alt))
-                        / (Math.cos(location.getLatitudeRadians()) * Math.cos(alt))
+                (Math.sin(eq.getDeclinationRadians()) - Math.sin(lat) * Math.sin(alt))
+                        / (Math.cos(lat) * Math.cos(alt))
         );
         az = Math.sin(hourAngle) < 0 ? az : 2*Math.PI - az;
 
