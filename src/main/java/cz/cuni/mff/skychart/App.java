@@ -202,6 +202,7 @@ public class App extends Application {
                     dist.setValue(dist.getValue() + 0.5);
                     break;
                 case N:
+                    if(dist.getValue() < 10)
                     if(dist.getValue() > 1)
                         dist.setValue(dist.getValue() - 0.5);
                     break;

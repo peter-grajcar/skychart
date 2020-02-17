@@ -44,10 +44,18 @@ public class LocationPicker extends GridPane {
         });
 
         latitude.textProperty().addListener((observableValue, oldLatitude, newLatitude) -> {
-            location.get().setLatitude(Double.parseDouble(newLatitude));
+            try {
+                location.get().setLatitude(Double.parseDouble(newLatitude));
+            } catch (NumberFormatException e) {
+
+            }
         });
         longitude.textProperty().addListener((observableValue, oldLongitude, newLongitude) -> {
-            location.get().setLongitude(Double.parseDouble(newLongitude));
+            try {
+                location.get().setLongitude(Double.parseDouble(newLongitude));
+            } catch (NumberFormatException e){
+
+            }
         });
     }
 
