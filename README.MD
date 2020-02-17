@@ -1,4 +1,4 @@
-![Generic badge](https://img.shields.io/badge/VERSION-1.0.1-<COLOR>.svg)
+![Generic badge](https://img.shields.io/badge/Version-1.0.2-<COLOR>.svg)
 
 # SkyChart
 
