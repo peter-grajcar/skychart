@@ -66,7 +66,9 @@ public class Coordinates {
 
         double lat = location.getLatitudeRadians();
         if(90 - location.getLatitude() < 1e-8 )
-            lat -= 1e-8;
+            lat = 90 - 1e-8;
+        else if(90 + location.getLatitude() < 1e-8 )
+            lat = -90 + 1e-8;
 
         double alt =  Math.asin(
                 Math.sin(eq.getDeclinationRadians()) * Math.sin(lat)
